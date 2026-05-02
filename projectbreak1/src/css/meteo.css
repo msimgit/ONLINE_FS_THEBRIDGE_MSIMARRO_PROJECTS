@@ -1,0 +1,209 @@
+/* ── Layout página ────────────────────────── */
+.page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  padding-bottom: 40px;
+  gap: 16px;
+}
+
+/* ── Tarjeta principal ────────────────────── */
+.meteo-card {
+  border: 1px solid var(--accent);
+  border-radius: 16px;
+  padding: 32px 36px;
+  width: 400px;
+  background: #1a1a1a;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader {
+  color: #888;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.hidden { display: none; }
+
+.meteo-data {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+
+/* ── Columna izquierda ────────────────────── */
+.meteo-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex: 1;
+}
+
+.meteo-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.meteo-sep {
+  color: var(--accent);
+}
+
+#pais {
+  font-size: 14px;
+  color: #aaa;
+  font-weight: 400;
+}
+
+.meteo-condicion {
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.meteo-icon {
+  width: 80px;
+  height: 80px;
+}
+
+.meteo-temp {
+  font-size: 72px;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* ── Divisor vertical ─────────────────────── */
+.meteo-divider {
+  width: 1px;
+  height: 180px;
+  background: #333;
+  margin: 0 28px;
+  flex-shrink: 0;
+}
+
+/* ── Columna derecha ──────────────────────── */
+.meteo-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.meteo-detalle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.forecast-manana {
+  font-size: 9px;
+  color: var(--accent);
+}
+
+.detalle-label {
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.detalle-valor {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-align: right;
+}
+
+/* ── Tarjeta forecast ─────────────────────── */
+.forecast-card {
+  width: 620px;
+  border: 1px solid #333;
+  border-radius: 16px;
+  background: #1a1a1a;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.forecast-playbtn {
+  background: var(--accent);
+  border: none;
+  border-radius: 50%;
+  margin-right: 16px;
+  width: 40px;
+  height: 40px;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.forecast-playbtn:hover {
+  background: var(--accent-hover);
+  transform: scale(1.08);
+}
+
+.forecast-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  flex: 1;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) #1a1a1a;
+}
+
+.forecast-scroll::-webkit-scrollbar { height: 3px; }
+.forecast-scroll::-webkit-scrollbar-track { background: #1a1a1a; }
+.forecast-scroll::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.forecast-item {
+  min-width: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.forecast-item.activo {
+  opacity: 1;
+}
+
+.forecast-hora {
+  font-size: 11px;
+  color: #888;
+}
+
+.forecast-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.forecast-temp {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}

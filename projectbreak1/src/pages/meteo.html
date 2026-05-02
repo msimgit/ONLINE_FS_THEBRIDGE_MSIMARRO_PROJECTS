@@ -1,30 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reloj · MS Dashboard</title>
-    <link rel="stylesheet" href="../css/styles.css" />
-  </head>
-  <body>
 
-    <nav class="navbar">
-      <div class="nav-group">
-        <a href="reloj.html" class="nav-btn">Reloj</a>
-        <a href="meteo.html" class="nav-btn">Meteo</a>
-        <a href="../../index.html" class="nav-logo-link">
-          <img src="https://res.cloudinary.com/dyd4vcwkg/image/upload/v1777720506/ms_logo_oswjax.png" alt="MS Logo" class="nav-logo" />
-        </a>
-        <a href="pass.html" class="nav-btn">Contraseñas</a>
-        <a href="links.html" class="nav-btn">Links</a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meteo · MS Dashboard</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/meteo.css" />
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="nav-group">
+      <a href="reloj.html" class="nav-btn">Reloj</a>
+      <a href="meteo.html" class="nav-btn">Meteo</a>
+      <a href="../../index.html" class="nav-logo-link">
+        <img src="https://res.cloudinary.com/dyd4vcwkg/image/upload/v1777720506/ms_logo_oswjax.png" alt="MS Logo"
+          class="nav-logo" />
+      </a>
+      <a href="pass.html" class="nav-btn">Contraseñas</a>
+      <a href="links.html" class="nav-btn">Links</a>
+    </div>
+  </nav>
+
+  <main class="page-content">
+
+    <!-- Tarjeta principal -->
+    <div class="meteo-card" id="meteo-card">
+
+      <div id="loader" class="loader">Cargando...</div>
+
+      <div id="meteo-data" class="meteo-data hidden">
+
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="meteo-left">
+          <div class="meteo-location">
+            <span id="ciudad">--</span>
+            <span class="meteo-sep">/</span>
+            <span id="pais">--</span>
+          </div>
+          <div id="condicion" class="meteo-condicion">--</div>
+          <img id="icono" src="" alt="icono clima" class="meteo-icon" />
+          <span id="temperatura" class="meteo-temp">--</span>
+        </div>
+
+        <!-- DIVISOR -->
+        <div class="meteo-divider"></div>
+
+        <!-- COLUMNA DERECHA -->
+        <div class="meteo-right">
+          <div class="meteo-detalle">
+            <span class="detalle-label">Precipitación</span>
+            <span id="precipitacion" class="detalle-valor">--</span>
+          </div>
+          <div class="meteo-detalle">
+            <span class="detalle-label">Humedad</span>
+            <span id="humedad" class="detalle-valor">--</span>
+          </div>
+          <div class="meteo-detalle">
+            <span class="detalle-label">Viento</span>
+            <span id="viento" class="detalle-valor">--</span>
+          </div>
+          <div class="meteo-detalle">
+            <span class="detalle-label">Presión</span>
+            <span id="presion" class="detalle-valor">--</span>
+          </div>
+          <div class="meteo-detalle">
+            <span class="detalle-label">Sensación</span>
+            <span id="sensacion" class="detalle-valor">--</span>
+          </div>
+          <div class="meteo-detalle">
+            <span class="detalle-label">Visibilidad</span>
+            <span id="visibilidad" class="detalle-valor">--</span>
+          </div>
+          <div class="meteo-detalle">
+            <span class="detalle-label">UV</span>
+            <span id="uv" class="detalle-valor">--</span>
+          </div>
+        </div>
+
       </div>
-    </nav>
+    </div>
 
-    <main class="page-content">
-        
-    </main>
+    <!-- TARJETA FORECAST 24H -->
+    <h3 class="forecast-title">Próximas 24h</h3>
+    
+    <div class="meteo-card">
+      <button class="forecast-playbtn" id="forecast-play" title="Play/Pause">▶</button>
+      <div class="forecast-scroll" id="forecast-scroll">
+        <!-- generado por JS -->
+      </div>
+    </div>
 
-    <script src="../js/reloj.js"></script>
+    <!-- Previsión 24h -->
+    <div class="forecast-wrapper" id="forecast-wrapper">
+      <div class="forecast-scroll" id="forecast-scroll">
+        <!-- se generará con JS -->
+      </div>
+    </div>
 
-  </body>
+  </main>
+
+  <footer id="bg-franja">
+    <div class="bg-overlay"></div>
+  </footer>
+
+  <script src="../js/meteo.js"></script>
+  <script src="../js/main.js"></script>
+
+</body>
+
 </html>
