@@ -24,8 +24,9 @@ body {
 .page-content {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - var(--nav-height));
+  align-items: flex-start;
+  padding-top: 60px;
+  padding-bottom: 40px;
 }
 
 /* ── Navbar ───────────────────────────────── */
@@ -187,4 +188,27 @@ body {
   font-size: 16px;
   color: #888;
   letter-spacing: 2px;
+}
+
+
+/* ── Footer / franja background ──────────── */
+#bg-franja {
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  transition: background-image 1.5s ease-in-out;
+}
+
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    #111 0%,                        /* funde con el contenido de arriba */
+    rgba(180, 30, 0, 0.5) 50%,      /* rojo tenue en el centro */
+    #111 100%                       /* cierre oscuro abajo */
+  );
 }

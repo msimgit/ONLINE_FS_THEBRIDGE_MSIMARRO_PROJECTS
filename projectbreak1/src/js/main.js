@@ -1,0 +1,31 @@
+const imagenes = [
+  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600",
+  "https://images.unsplash.com/photo-1604076913837-52ab5629fde4?w=1600",
+  "https://images.unsplash.com/photo-1566041510639-8d95a2490bfb?w=1600",
+  "https://images.unsplash.com/photo-1557683316-973673baf926?w=1600",
+  "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=1600",
+  "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=1600",
+  "https://images.unsplash.com/photo-1507908708918-778587c9e563?w=1600",
+  "https://images.unsplash.com/photo-1572099606223-6e29045d7de3?w=1600",
+  "https://images.unsplash.com/photo-1553356084-58ef4a67b2a7?w=1600",
+  "https://images.unsplash.com/photo-1510519138101-570d1dca3d66?w=1600"
+];
+
+let indiceActual = 0;
+
+function cambiarImagen() {
+  let nuevoIndice;
+  do {
+    nuevoIndice = Math.floor(Math.random() * imagenes.length);
+  } while (nuevoIndice === indiceActual);
+
+  indiceActual = nuevoIndice;
+
+  const franja = document.getElementById('bg-franja');
+  if (franja) {
+    franja.style.backgroundImage = `url('${imagenes[indiceActual]}')`;
+  }
+}
+
+cambiarImagen();
+setInterval(cambiarImagen, 15000);
