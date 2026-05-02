@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Dashboard · TheBridge</title>
+    <link rel="stylesheet" href="src/css/styles.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-group">
+            <a href="src/pages/reloj.html" class="nav-btn">Reloj</a>
+            <a href="src/pages/meteo.html" class="nav-btn">Meteo</a>
+            <a href="index.html" class="nav-logo-link">
+                <img src="https://res.cloudinary.com/dyd4vcwkg/image/upload/v1777720506/ms_logo_oswjax.png"
+                    alt="MS Logo" class="nav-logo" />
+            </a>
+            <a href="src/pages/pass.html" class="nav-btn">Contraseñas</a>
+            <a href="src/pages/links.html" class="nav-btn">Links</a>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+
+        <div class="card" id="card-reloj">
+            <h2 class="card-title">Reloj</h2>
+            <div class="clock-time" id="clock-time">00:00:00</div>
+            <div class="clock-date" id="clock-date">00/00/0000</div>
+            <a href="src/pages/reloj.html" class="card-btn">Ver página</a>
+        </div>
+
+        <div class="card" id="card-meteo">
+            <h2 class="card-title">Meteo</h2>
+            <a href="src/pages/meteo.html" class="card-btn">Ver página</a>
+        </div>
+
+        <div class="card" id="card-pass">
+            <h2 class="card-title">Generador de contraseñas</h2>
+            <a href="src/pages/pass.html" class="card-btn">Ver página</a>
+        </div>
+
+        <div class="card" id="card-links">
+            <h2 class="card-title">Webs favoritas</h2>
+            <a href="src/pages/links.html" class="card-btn">Ver página</a>
+        </div>
+
+    </main>
+    <script src="src/js/main.js"></script>
+</body>
+
+</html>

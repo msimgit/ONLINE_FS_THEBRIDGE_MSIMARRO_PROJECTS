@@ -1,0 +1,171 @@
+/* ── Variables globales ───────────────────── */
+:root {
+  --nav-height: 64px;                           /* ajustamos el valor adecuadamente */
+  --nav-bg: #1a1a1a;
+  --accent: #FF6B35;
+  --accent-hover: #e85a22;
+  --logo-size: calc(var(--nav-height) - 16px);  /* altura del logo proporcional */
+}
+
+/* ── Reset básico ─────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #111;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  padding-top: var(--nav-height);               /* evitamos que el nav tape el contenido */
+}
+
+/* ── Navbar ───────────────────────────────── */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--nav-height);
+  background: var(--nav-bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 1000;
+  border-bottom: 1px solid #333;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ── Navbar ───────────────────────────────── */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--nav-height);
+  background: var(--nav-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;   /* centra el grupo entero */
+  padding: 0 24px;
+  z-index: 1000;
+  border-bottom: 1px solid #333;
+}
+
+/* ── Logo ─────────────────────────────────── */
+.nav-logo {
+  height: var(--logo-size);
+  width: auto;
+  display: block;
+  transition: opacity 0.2s;
+}
+
+.nav-logo:hover {
+  opacity: 0.8;
+}
+
+/* ── Botones ──────────────────────────────── */
+.nav-btn {
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-size: 12x;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.nav-btn:hover {
+  background: var(--accent-hover);
+  transform: scale(1.04);
+}
+
+/* ── Responsivo ───────────────────────────── */
+@media (max-width: 600px) {
+  .nav-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .navbar {
+    padding: 0 12px;
+  }
+}
+
+/* ── Dashboard ────────────────────────────── */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  padding: 40px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Card base ────────────────────────────── */
+.card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 16px;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ── Botón de la card ─────────────────────── */
+.card-btn {
+  margin-top: 12px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.card-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── Reloj ────────────────────────────────── */
+.clock-time {
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums; /* evita que los números "bailen" al cambiar */
+}
+
+.clock-date {
+  font-size: 16px;
+  color: #888;
+  letter-spacing: 2px;
+}
