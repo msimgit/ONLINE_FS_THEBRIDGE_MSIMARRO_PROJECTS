@@ -21,6 +21,13 @@ body {
   padding-top: var(--nav-height);               /* evitamos que el nav tape el contenido */
 }
 
+.page-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - var(--nav-height));
+}
+
 /* ── Navbar ───────────────────────────────── */
 .navbar {
   position: fixed;
@@ -89,6 +96,7 @@ body {
   transform: scale(1.04);
 }
 
+
 /* ── Responsivo ───────────────────────────── */
 @media (max-width: 600px) {
   .nav-btn {
@@ -104,11 +112,10 @@ body {
 /* ── Dashboard ────────────────────────────── */
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, 300px);
   gap: 24px;
   padding: 40px 32px;
-  max-width: 1200px;
-  margin: 0 auto;
+  justify-content: center;
 }
 
 /* ── Card base ────────────────────────────── */
@@ -153,6 +160,18 @@ body {
 .card-btn:hover {
   background: var(--accent);
   color: #fff;
+}
+
+.card-desc {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.card-desc code {
+  color: var(--accent);
+  font-size: 13px;
 }
 
 /* ── Reloj ────────────────────────────────── */
