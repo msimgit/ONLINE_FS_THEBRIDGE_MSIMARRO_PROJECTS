@@ -191,8 +191,3 @@ Full Stack Developer · The Bridge, promoción marzo 2026
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mariosimarro)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/msimgit)
-<<<<<<< HEAD
-
-*Desarrollado por [Mario Simarro](https://www.linkedin.com/in/mariosimarro) · PixelForge Dev Studio*
-=======
->>>>>>> 3a8638b208893b0aae6f2f5694094001201cd0b7
