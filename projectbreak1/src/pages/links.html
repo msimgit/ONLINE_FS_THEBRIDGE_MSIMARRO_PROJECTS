@@ -1,30 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reloj · MS Dashboard</title>
-    <link rel="stylesheet" href="../css/styles.css" />
-  </head>
-  <body>
 
-    <nav class="navbar">
-      <div class="nav-group">
-        <a href="reloj.html" class="nav-btn">Reloj</a>
-        <a href="meteo.html" class="nav-btn">Meteo</a>
-        <a href="../../index.html" class="nav-logo-link">
-          <img src="https://res.cloudinary.com/dyd4vcwkg/image/upload/v1777720506/ms_logo_oswjax.png" alt="MS Logo" class="nav-logo" />
-        </a>
-        <a href="pass.html" class="nav-btn">Contraseñas</a>
-        <a href="links.html" class="nav-btn">Links</a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Links · MS Dashboard</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/links.css" />
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="nav-group">
+      <a href="reloj.html" class="nav-btn">Reloj</a>
+      <a href="meteo.html" class="nav-btn">Meteo</a>
+      <a href="../../index.html" class="nav-logo-link">
+        <img src="https://res.cloudinary.com/dyd4vcwkg/image/upload/v1777720506/ms_logo_oswjax.png" alt="MS Logo"
+          class="nav-logo" />
+      </a>
+      <a href="pass.html" class="nav-btn">Contraseñas</a>
+      <a href="links.html" class="nav-btn">Links</a>
+    </div>
+  </nav>
+
+  <main class="page-content">
+
+    <!-- Formulario añadir enlace -->
+    <div class="links-form-card">
+      <h2 class="card-title">Añadir enlace</h2>
+      <div class="links-form">
+        <input type="text" id="input-titulo" class="links-input" placeholder="Nombre del enlace" />
+        <input type="url" id="input-url" class="links-input" placeholder="https://..." />
+        <select id="input-categoria" class="links-input links-select">
+          <option value="">-- Selecciona categoría --</option>
+          <option value="Essential &quot;Must-Read&quot; Books">Essential "Must-Read" Books</option>
+          <option value="Software Architecture">Software Architecture</option>
+          <option value="Design Patterns">Design Patterns</option>
+          <option value="Web Development & Languages">Web Development & Languages</option>
+          <option value="Data Science, AI & Algorithms">Data Science, AI & Algorithms</option>
+          <option value="Top Free Resources">Top Free Resources</option>
+          <option value="Miscellaneous">Miscellaneous</option>
+        </select>
+        <button id="btn-añadir" class="card-btn links-btn-add">+ Añadir enlace</button>
       </div>
-    </nav>
+      <span id="links-error" class="links-error hidden">Rellena todos los campos correctamente</span>
+    </div>
 
-    <main class="page-content">
+    <a href="../../index.html" class="card-btn">Volver al dashboard</a>
 
-    </main>
+    <!-- Grid de categorías — mismas clases que index.html -->
+    <div class="links-grid" id="links-grid"></div>
 
-    <script src="../js/reloj.js"></script>
+  </main>
 
-  </body>
+  <footer id="bg-franja">
+    <div class="bg-overlay"></div>
+  </footer>
+
+  <script src="../js/links.js"></script>
+
+</body>
+
 </html>

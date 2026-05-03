@@ -35,22 +35,25 @@
 
         <div class="card">
             <h2 class="card-title">Meteorología</h2>
-            <p class="card-desc">Estación meteorológica en tiempo real <code>conectada a una API externa.</code> Muestra temperatura,
+            <p class="card-desc">Estación meteorológica en tiempo real <code>conectada a una API externa.
+
+            </code> Muestra temperatura,
                 estado del cielo y previsión.</p>
             <a href="./src/pages/meteo.html" class="card-btn">Ver ejercicio</a>
         </div>
 
         <div class="card">
             <h2 class="card-title">Contraseñas</h2>
-            <p class="card-desc">Generador de contraseñas seguras con opciones de longitud, mayúsculas, números y
-                símbolos especiales.</p>
+            <p class="card-desc">Generador de contraseñas seguras. Implementa <code>Math.random()</code> 
+                con algoritmo code>Fisher-Yates shuffle</code> para aleatoriedad real.</p>
             <a href="./src/pages/pass.html" class="card-btn">Ver ejercicio</a>
         </div>
 
         <div class="card">
             <h2 class="card-title">Links</h2>
-            <p class="card-desc">Colección de links de referencia para developers con imágenes de fondo aleatorias en
-                cada visita.</p>
+            <p class="card-desc"> Gestor de enlaces con persistencia mediante <code>localStorage</code>. 
+                Renderizado dinámico del <code>DOM</code> y datos semilla independientes de la sesión del 
+                usuario.</p>
             <a href="./src/pages/links.html" class="card-btn">Ver ejercicio</a>
         </div>
 
@@ -58,6 +61,13 @@
 
     <footer id="bg-franja">
         <div class="bg-overlay"></div>
+        <div class="footer-credits">
+            <span class="footer-credits-inner">
+                Desarrollado por
+                <a id="link-footer"href="https://www.linkedin.com/in/mariosimarro" target="_blank" rel="noopener" class="footer-link">Mario Simarro</a>
+            <p> gracias a TheBridge FullStack March'26</p>
+            </span>
+        </div>
     </footer>
 
     <script src="src/js/main.js"></script>

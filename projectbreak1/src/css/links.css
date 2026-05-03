@@ -1,0 +1,172 @@
+/* ── Página ───────────────────────────────── */
+.page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  padding-bottom: 40px;
+  gap: 32px;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 300px);
+  gap: 24px;
+  padding: 0 32px;
+  justify-content: center;
+  width: 100%;
+  max-width: 1400px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1300px) {
+  .links-grid { grid-template-columns: repeat(3, 300px); }
+}
+
+@media (max-width: 980px) {
+  .links-grid { grid-template-columns: repeat(2, 300px); }
+}
+
+@media (max-width: 660px) {
+  .links-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Formulario ───────────────────────────── */
+.links-form-card {
+  border: 1px solid var(--accent);
+  border-radius: 16px;
+  padding: 32px 40px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: #1a1a1a;
+}
+
+.links-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.links-input {
+  width: 100%;
+  background: #111;
+  border: 1px solid #444;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.links-input:focus {
+  border-color: var(--accent);
+}
+
+.links-input::placeholder {
+  color: #555;
+}
+
+.links-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23FF6B35' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.links-select option {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.links-btn-add {
+  width: 100%;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.links-error {
+  font-size: 12px;
+  color: #e74c3c;
+  letter-spacing: 1px;
+}
+
+/* ── Lista dentro de cada card ────────────── */
+.links-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+/* ── Item ─────────────────────────────────── */
+.links-item {
+  display: flex;
+  align-items: center;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.links-item:hover {
+  border-color: var(--accent);
+}
+
+.links-enlace {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  padding: 8px 10px;
+  text-decoration: none;
+  color: #ccc;
+  overflow: hidden;
+  transition: color 0.2s;
+}
+
+.links-enlace:hover {
+  color: #fff;
+}
+
+.links-favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.links-titulo {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.links-delete {
+  background: transparent;
+  border: none;
+  color: #333;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 8px 10px;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.links-delete:hover {
+  color: #e74c3c;
+}
+
+.hidden { display: none !important; }

@@ -86,7 +86,7 @@ body {
   text-decoration: none;
   padding: 8px 18px;
   border-radius: 12px;
-  font-size: 12x;
+  font-size: 12px;
   font-weight: 600;
   transition: background 0.2s, transform 0.1s;
   white-space: nowrap;
@@ -97,27 +97,22 @@ body {
   transform: scale(1.04);
 }
 
-
-/* ── Responsivo ───────────────────────────── */
-@media (max-width: 600px) {
-  .nav-btn {
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-
-  .navbar {
-    padding: 0 12px;
-  }
-}
-
 /* ── Dashboard ────────────────────────────── */
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 300px);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 300px));
   gap: 24px;
   padding: 40px 32px;
   justify-content: center;
 }
+
+/* ── Responsivo ───────────────────────────── */
+@media (min-width: 1400px) {
+  .dashboard {
+    grid-template-columns: repeat(4, 300px);
+  }
+}
+
 
 /* ── Card base ────────────────────────────── */
 .card {
@@ -211,4 +206,41 @@ body {
     rgba(180, 30, 0, 0.5) 50%,      /* rojo tenue en el centro */
     #111 100%                       /* cierre oscuro abajo */
   );
+}
+
+
+.footer-credits {
+  position: relative;
+  top: 120px;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+
+  /* Texto */
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  white-space: nowrap;
+
+  /* Fondo negro difuminado en los extremos */
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.75) 15%,
+    rgba(0, 0, 0, 0.75) 85%,
+    transparent 100%
+  );
+  padding: 10px 48px;
+  /*border-radius: 999px;*/
+
+  /* Aparición suave */
+  animation: fadeInFooter 1.2s ease forwards;
+}
+
+#link-footer {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
 }
