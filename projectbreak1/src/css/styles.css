@@ -1,10 +1,10 @@
 /* ── Variables globales ───────────────────── */
 :root {
-  --nav-height: 64px;                           /* ajustamos el valor adecuadamente */
+  --nav-height: 64px;
   --nav-bg: #1a1a1a;
   --accent: #FF6B35;
   --accent-hover: #e85a22;
-  --logo-size: calc(var(--nav-height) - 16px);  /* altura del logo proporcional */
+  --logo-size: calc(var(--nav-height) - 16px);
 }
 
 /* ── Reset básico ─────────────────────────── */
@@ -18,9 +18,10 @@ body {
   background: #111;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
-  padding-top: var(--nav-height);               /* evitamos que el nav tape el contenido */
+  padding-top: var(--nav-height);
 }
 
+/* ── Page content ─────────────────────────── */
 .page-content {
   display: flex;
   justify-content: center;
@@ -39,7 +40,7 @@ body {
   background: var(--nav-bg);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 24px;
   z-index: 1000;
   border-bottom: 1px solid #333;
@@ -48,26 +49,23 @@ body {
 .nav-group {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 16px;
 }
 
-/* ── Navbar ───────────────────────────────── */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: var(--nav-height);
-  background: var(--nav-bg);
+/* ── Nav links — grupos de botones ───────── */
+.nav-links {
   display: flex;
   align-items: center;
-  justify-content: center;   /* centra el grupo entero */
-  padding: 0 24px;
-  z-index: 1000;
-  border-bottom: 1px solid #333;
+  gap: 8px;
 }
 
 /* ── Logo ─────────────────────────────────── */
+.nav-logo-link {
+  display: flex;
+  align-items: center;
+}
+
 .nav-logo {
   height: var(--logo-size);
   width: auto;
@@ -79,7 +77,7 @@ body {
   opacity: 0.8;
 }
 
-/* ── Botones ──────────────────────────────── */
+/* ── Botones nav ──────────────────────────── */
 .nav-btn {
   background: var(--accent);
   color: #fff;
@@ -97,22 +95,116 @@ body {
   transform: scale(1.04);
 }
 
+/* ── Hamburguesa ──────────────────────────── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.nav-hamburger.abierto span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-hamburger.abierto span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-hamburger.abierto span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── Menú desplegable móvil ───────────────── */
+.nav-menu {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  padding: 16px 24px;
+  border: none;
+  border-radius: 0 0 16px 16px;
+  position: fixed;
+  top: var(--nav-height);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  z-index: 999;
+}
+
+.nav-menu.abierto {
+  display: flex;
+}
+
+.nav-menu-btn {
+  background: #111;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 24px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  width: auto;
+  text-align: center;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+.nav-menu-btn:hover {
+  background: #1a1a1a;
+  color: var(--accent);
+  transform: scale(1.04);
+}
+
+/* ── Breakpoint hamburguesa (<450px) ──────── */
+@media (max-width: 450px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .nav-group {
+    width: 100%;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .nav-logo-link {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
 /* ── Dashboard ────────────────────────────── */
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 300px));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 300px));
   gap: 24px;
   padding: 40px 32px;
   justify-content: center;
 }
 
-/* ── Responsivo ───────────────────────────── */
 @media (min-width: 1400px) {
   .dashboard {
     grid-template-columns: repeat(4, 300px);
   }
 }
-
 
 /* ── Card base ────────────────────────────── */
 .card {
@@ -140,24 +232,6 @@ body {
   color: var(--accent);
 }
 
-/* ── Botón de la card ─────────────────────── */
-.card-btn {
-  margin-top: 12px;
-  background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  padding: 8px 20px;
-  border-radius: 999px;
-  font-size: 13px;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-}
-
-.card-btn:hover {
-  background: var(--accent);
-  color: #fff;
-}
-
 .card-desc {
   font-size: 14px;
   color: #888;
@@ -170,13 +244,33 @@ body {
   font-size: 13px;
 }
 
+/* ── Botón de card ────────────────────────── */
+.card-btn {
+  margin-top: 12px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  display: inline-block;
+  text-align: center;
+}
+
+.card-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
 /* ── Reloj ────────────────────────────────── */
 .clock-time {
   font-size: 52px;
   font-weight: 700;
   letter-spacing: 4px;
   color: #ffffff;
-  font-variant-numeric: tabular-nums; /* evita que los números "bailen" al cambiar */
+  font-variant-numeric: tabular-nums;
 }
 
 .clock-date {
@@ -184,7 +278,6 @@ body {
   color: #888;
   letter-spacing: 2px;
 }
-
 
 /* ── Footer / franja background ──────────── */
 #bg-franja {
@@ -202,45 +295,52 @@ body {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    #111 0%,                        /* funde con el contenido de arriba */
-    rgba(180, 30, 0, 0.5) 50%,      /* rojo tenue en el centro */
-    #111 100%                       /* cierre oscuro abajo */
+    #111 0%,
+    rgba(180, 30, 0, 0.5) 50%,
+    #111 100%
   );
 }
 
-
+/* ── Footer credits ───────────────────────── */
 .footer-credits {
   position: relative;
-  top: 120px;
+  top: 125px;
+  width: 100%;
   text-align: center;
-  left: 50%;
-  transform: translateX(-50%);
-  width: fit-content;
+  z-index: 2;
+}
 
-  /* Texto */
-  color: white;
-  font-size: 14px;
+.footer-credits-inner {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 10px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 107, 53, 0.25);
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 2px;
-  white-space: nowrap;
-
-  /* Fondo negro difuminado en los extremos */
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(0, 0, 0, 0.75) 15%,
-    rgba(0, 0, 0, 0.75) 85%,
-    transparent 100%
-  );
-  padding: 10px 48px;
-  /*border-radius: 999px;*/
-
-  /* Aparición suave */
-  animation: fadeInFooter 1.2s ease forwards;
-}
-
-#link-footer {
   color: var(--accent);
-  font-size: 14px;
-  font-weight: 700;
+  white-space: nowrap;
 }
+
+@keyframes fadeInFooter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.footer-link {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.footer-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* ── Utilidades ───────────────────────────── */
+.hidden { display: none !important; }

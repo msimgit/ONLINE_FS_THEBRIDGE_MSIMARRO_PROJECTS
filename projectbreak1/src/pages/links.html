@@ -13,15 +13,42 @@
 
   <nav class="navbar">
     <div class="nav-group">
-      <a href="reloj.html" class="nav-btn">Reloj</a>
-      <a href="meteo.html" class="nav-btn">Meteo</a>
+
+      <!-- Botones izquierda -->
+      <div class="nav-links">
+        <a href="./reloj.html" class="nav-btn">Reloj</a>
+        <a href="./meteo.html" class="nav-btn">Meteo</a>
+      </div>
+
+      <!-- Logo centro -->
       <a href="../../index.html" class="nav-logo-link">
         <img src="https://res.cloudinary.com/dyd4vcwkg/image/upload/v1777720506/ms_logo_oswjax.png" alt="MS Logo"
           class="nav-logo" />
       </a>
-      <a href="pass.html" class="nav-btn">Contraseñas</a>
-      <a href="links.html" class="nav-btn">Links</a>
+
+      <!-- Botones derecha -->
+      <div class="nav-links">
+        <a href="./pass.html" class="nav-btn">Contraseñas</a>
+        <a href="./links.html" class="nav-btn">Links</a>
+      </div>
+
+      <!-- Hamburguesa — solo visible en móvil -->
+      <button class="nav-hamburger" id="nav-hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
     </div>
+
+    <!-- Menú desplegable móvil -->
+    <div class="nav-menu" id="nav-menu">
+      <a href="./reloj.html" class="nav-menu-btn">Reloj</a>
+      <a href="./meteo.html" class="nav-menu-btn">Meteo</a>
+      <a href="./pass.html" class="nav-menu-btn">Contraseñas</a>
+      <a href="./links.html" class="nav-menu-btn">Links</a>
+    </div>
+
   </nav>
 
   <main class="page-content">
@@ -59,6 +86,7 @@
   </footer>
 
   <script src="../js/links.js"></script>
+  <script src="../js/main.js"></script>
 
 </body>
 

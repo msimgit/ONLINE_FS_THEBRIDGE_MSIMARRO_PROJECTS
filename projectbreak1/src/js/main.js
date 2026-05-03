@@ -1,3 +1,4 @@
+// ── Imágenes de fondo aleatorias ───────────
 const imagenes = [
   "https://images.unsplash.com/photo-1638369304934-2aee38e939c7?w=1600",
   "https://images.unsplash.com/photo-1772631289758-eadba33eb221?w=1600",
@@ -30,3 +31,21 @@ function cambiarImagen() {
 
 cambiarImagen();
 setInterval(cambiarImagen, 15000);
+
+// ── Hamburguesa ────────────────────────────
+const hamburger = document.getElementById('nav-hamburger');
+const menu      = document.getElementById('nav-menu');
+
+if (hamburger && menu) {
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('abierto');
+    menu.classList.toggle('abierto');
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 600) {
+      hamburger.classList.remove('abierto');
+      menu.classList.remove('abierto');
+    }
+  });
+}

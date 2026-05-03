@@ -1,76 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MS Dashboard · TheBridge</title>
-    <link rel="stylesheet" href="src/css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MS Dashboard · TheBridge</title>
+  <link rel="stylesheet" href="src/css/styles.css">
 </head>
 
 <body>
 
-    <nav class="navbar">
-        <div class="nav-group">
-            <a href="src/pages/reloj.html" class="nav-btn">Reloj</a>
-            <a href="src/pages/meteo.html" class="nav-btn">Meteo</a>
-            <a href="index.html" class="nav-logo-link">
-                <img src="https://res.cloudinary.com/dyd4vcwkg/image/upload/v1777720506/ms_logo_oswjax.png"
-                    alt="MS Logo" class="nav-logo" />
-            </a>
-            <a href="src/pages/pass.html" class="nav-btn">Contraseñas</a>
-            <a href="src/pages/links.html" class="nav-btn">Links</a>
-        </div>
-    </nav>
+  <nav class="navbar">
+    <div class="nav-group">
 
-    <main class="dashboard">
+      <!-- Botones izquierda -->
+      <div class="nav-links">
+        <a href="./src/pages/reloj.html" class="nav-btn">Reloj</a>
+        <a href="./src/pages/meteo.html" class="nav-btn">Meteo</a>
+      </div>
 
-        <div class="card">
-            <h2 class="card-title">Reloj</h2>
-            <p class="card-desc">Reloj digital 24h con fecha actual y mensajes según la hora del día. Construido con
-                <code>new Date()</code> y <code>setInterval()</code>.
-            </p>
-            <a href="./src/pages/reloj.html" class="card-btn">Ver ejercicio</a>
-        </div>
+      <!-- Logo centro -->
+      <a href="index.html" class="nav-logo-link">
+        <img src="https://res.cloudinary.com/dyd4vcwkg/image/upload/v1777720506/ms_logo_oswjax.png"
+          alt="MS Logo" class="nav-logo" />
+      </a>
 
-        <div class="card">
-            <h2 class="card-title">Meteorología</h2>
-            <p class="card-desc">Estación meteorológica en tiempo real <code>conectada a una API externa.
+      <!-- Botones derecha -->
+      <div class="nav-links">
+        <a href="./src/pages/pass.html" class="nav-btn">Contraseñas</a>
+        <a href="./src/pages/links.html" class="nav-btn">Links</a>
+      </div>
 
-            </code> Muestra temperatura,
-                estado del cielo y previsión.</p>
-            <a href="./src/pages/meteo.html" class="card-btn">Ver ejercicio</a>
-        </div>
+      <!-- Hamburguesa — solo visible en móvil -->
+      <button class="nav-hamburger" id="nav-hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
-        <div class="card">
-            <h2 class="card-title">Contraseñas</h2>
-            <p class="card-desc">Generador de contraseñas seguras. Implementa <code>Math.random()</code> 
-                con algoritmo code>Fisher-Yates shuffle</code> para aleatoriedad real.</p>
-            <a href="./src/pages/pass.html" class="card-btn">Ver ejercicio</a>
-        </div>
+    </div>
 
-        <div class="card">
-            <h2 class="card-title">Links</h2>
-            <p class="card-desc"> Gestor de enlaces con persistencia mediante <code>localStorage</code>. 
-                Renderizado dinámico del <code>DOM</code> y datos semilla independientes de la sesión del 
-                usuario.</p>
-            <a href="./src/pages/links.html" class="card-btn">Ver ejercicio</a>
-        </div>
+    <!-- Menú desplegable móvil -->
+    <div class="nav-menu" id="nav-menu">
+      <a href="./src/pages/reloj.html" class="nav-menu-btn">Reloj</a>
+      <a href="./src/pages/meteo.html" class="nav-menu-btn">Meteo</a>
+      <a href="./src/pages/pass.html" class="nav-menu-btn">Contraseñas</a>
+      <a href="./src/pages/links.html" class="nav-menu-btn">Links</a>
+    </div>
 
-    </main>
+  </nav>
 
-    <footer id="bg-franja">
-        <div class="bg-overlay"></div>
-        <div class="footer-credits">
-            <span class="footer-credits-inner">
-                Desarrollado por
-                <a id="link-footer"href="https://www.linkedin.com/in/mariosimarro" target="_blank" rel="noopener" class="footer-link">Mario Simarro</a>
-            <p> gracias a TheBridge FullStack March'26</p>
-            </span>
-        </div>
-    </footer>
+  <main class="dashboard">
 
-    <script src="src/js/main.js"></script>
+    <div class="card">
+      <h2 class="card-title">Reloj</h2>
+      <p class="card-desc">Reloj digital 24h con fecha actual y mensajes según la hora del día. Construido con
+        <code>new Date()</code> y <code>setInterval()</code>.
+      </p>
+      <a href="./src/pages/reloj.html" class="card-btn">Ver ejercicio</a>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Meteorología</h2>
+      <p class="card-desc">Estación meteorológica en tiempo real <code>conectada a una API externa</code>. Muestra temperatura,
+        estado del cielo y previsión.</p>
+      <a href="./src/pages/meteo.html" class="card-btn">Ver ejercicio</a>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Contraseñas</h2>
+      <p class="card-desc">Generador de contraseñas seguras. Implementa <code>Math.random()</code>
+        con algoritmo <code>Fisher-Yates shuffle</code> para aleatoriedad real.</p>
+      <a href="./src/pages/pass.html" class="card-btn">Ver ejercicio</a>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Links</h2>
+      <p class="card-desc">Gestor de enlaces con persistencia mediante <code>localStorage</code>.
+        Renderizado dinámico del <code>DOM</code> y datos semilla independientes de la sesión del usuario.</p>
+      <a href="./src/pages/links.html" class="card-btn">Ver ejercicio</a>
+    </div>
+
+  </main>
+
+  <footer id="bg-franja">
+    <div class="bg-overlay"></div>
+    <div class="footer-credits">
+      <span class="footer-credits-inner">
+        Desarrollado por
+        <a href="https://www.linkedin.com/in/mariosimarro" target="_blank" rel="noopener"
+          class="footer-link">Mario Simarro</a>
+        <p>Gracias a <a href="https://www.thebridge.tech" target="_blank" rel="noopener"
+            class="footer-link">TheBridge</a> FullStack March'26</a>
+        </p>
+      </span>
+    </div>
+  </footer>
+
+  <script src="src/js/main.js"></script>
+  <script src="src/js/bgImages.js"></script>
 
 </body>
 
