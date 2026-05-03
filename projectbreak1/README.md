@@ -129,8 +129,8 @@ projectbreak1/
     │   ├── pass.css
     │   └── links.css
     ├── js/
-    │   ├── main.js            # Lógica del reloj
-    │   ├── bgImages.js        # Imágenes de fondo aleatorias
+    │   ├── main.js            # L'ogica de las im'agenes aleatorias
+    │   ├── reloj.js           # Lógica del reloj
     │   ├── meteo.js
     │   ├── pass.js
     │   └── links.js
@@ -165,12 +165,8 @@ projectbreak1/
 | [W3Schools](https://www.w3schools.com) | Consulta rápida de sintaxis |
 | [WeatherAPI](https://www.weatherapi.com/docs/) | API meteorológica del ejercicio Meteo |
 | [Unsplash — Textures](https://unsplash.com/t/textures-patterns) | Imágenes de fondo aleatorias |
-| [The Odin Project](https://www.theodinproject.com) | Recurso complementario Full Stack |
-| [Dev.to — Software Architecture](https://dev.to/hamedi/software-architecture-for-developers-4g56) | Referencia arquitectura de software |
-| [Bytebytego](https://bytebytego.com/guides/the-ultimate-software-architect-knowledge-map/) | Mapa de conocimiento de arquitectura |
-| [GitHub Copilot](https://github.com/features/copilot) | Asistente IA integrado en VS Code |
 | [Bootstrap Icons](https://icons.getbootstrap.com) | Librería de iconos SVG |
-| [Devôt — Design Patterns](https://devot.team/blog/design-patterns) | Patrones de diseño en desarrollo |
+| Claude | IA para depuración y ayuda |
 
 ---
 
