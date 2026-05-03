@@ -166,7 +166,7 @@ projectbreak1/
 | [WeatherAPI](https://www.weatherapi.com/docs/) | API meteorológica del ejercicio Meteo |
 | [Unsplash — Textures](https://unsplash.com/t/textures-patterns) | Imágenes de fondo aleatorias |
 | [Bootstrap Icons](https://icons.getbootstrap.com) | Librería de iconos SVG |
-| Claude | IA para depuración y ayuda |
+| [Claude](https://claude.com/) | IA para depuración y ayuda |
 
 ---
 
@@ -177,5 +177,3 @@ Full Stack Developer · The Bridge, promoción marzo 2026
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mariosimarro)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/msimgit)
-
-*Desarrollado por [Mario Simarro](https://www.linkedin.com/in/mariosimarro) · PixelForge Dev Studio*
