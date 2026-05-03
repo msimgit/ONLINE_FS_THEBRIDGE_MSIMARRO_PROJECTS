@@ -1,30 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reloj · MS Dashboard</title>
-    <link rel="stylesheet" href="../css/styles.css" />
-  </head>
-  <body>
 
-    <nav class="navbar">
-      <div class="nav-group">
-        <a href="reloj.html" class="nav-btn">Reloj</a>
-        <a href="meteo.html" class="nav-btn">Meteo</a>
-        <a href="../../index.html" class="nav-logo-link">
-          <img src="https://res.cloudinary.com/dyd4vcwkg/image/upload/v1777720506/ms_logo_oswjax.png" alt="MS Logo" class="nav-logo" />
-        </a>
-        <a href="pass.html" class="nav-btn">Contraseñas</a>
-        <a href="links.html" class="nav-btn">Links</a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contraseñas · MS Dashboard</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/pass.css" />
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="nav-group">
+      <a href="reloj.html" class="nav-btn">Reloj</a>
+      <a href="meteo.html" class="nav-btn">Meteo</a>
+      <a href="../../index.html" class="nav-logo-link">
+        <img src="https://res.cloudinary.com/dyd4vcwkg/image/upload/v1777720506/ms_logo_oswjax.png" alt="MS Logo"
+          class="nav-logo" />
+      </a>
+      <a href="pass.html" class="nav-btn">Contraseñas</a>
+      <a href="links.html" class="nav-btn">Links</a>
+    </div>
+  </nav>
+
+  <main class="page-content">
+
+    <div class="pass-card">
+
+      <h2 class="card-title">Generador de contraseñas</h2>
+
+      <!-- Control longitud -->
+      <div class="pass-control">
+        <span class="pass-label">Longitud</span>
+        <input type="number" id="longitud" class="pass-input" min="12" max="50" value="16" />
+        <span class="pass-range-hint">12 – 50</span>
       </div>
-    </nav>
 
-    <main class="page-content">
+      <!-- Slider -->
+      <input type="range" id="slider" class="pass-slider" min="12" max="50" value="16" />
 
-    </main>
+      <!-- Botón generar -->
+      <button id="btn-generar" class="pass-btn">Generar contraseña</button>
 
-    <script src="../js/reloj.js"></script>
+      <!-- Resultado -->
+      <div class="pass-result-wrapper">
+        <span id="pass-resultado" class="pass-resultado">--</span>
+        <button id="btn-copiar" class="pass-copiar" title="Copiar">
+          <span id="icono-copiar">⧉</span>
+        </button>
+      </div>
 
-  </body>
+      <!-- Fortaleza -->
+      <div class="pass-strength">
+        <div class="strength-bar" id="strength-bar"></div>
+      </div>
+      <span id="strength-label" class="strength-label">--</span>
+
+      <!-- Mensaje copiado -->
+      <span id="msg-copiado" class="msg-copiado hidden">✓ ¡Copiado!</span>
+
+      <!-- Volver -->
+      <a href="../../index.html" class="card-btn">Volver al dashboard</a>
+
+    </div>
+
+  </main>
+
+  <footer id="bg-franja">
+    <div class="bg-overlay"></div>
+  </footer>
+
+  <script src="../js/pass.js"></script>
+
+</body>
+
 </html>
