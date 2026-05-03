@@ -129,8 +129,13 @@ projectbreak1/
     │   ├── pass.css
     │   └── links.css
     ├── js/
+<<<<<<< HEAD
     │   ├── main.js            # Lógica del reloj
     │   ├── bgImages.js        # Imágenes de fondo aleatorias
+=======
+    │   ├── main.js            # L'ogica de las im'agenes aleatorias
+    │   ├── reloj.js           # Lógica del reloj
+>>>>>>> 3a8638b208893b0aae6f2f5694094001201cd0b7
     │   ├── meteo.js
     │   ├── pass.js
     │   └── links.js
@@ -165,12 +170,17 @@ projectbreak1/
 | [W3Schools](https://www.w3schools.com) | Consulta rápida de sintaxis |
 | [WeatherAPI](https://www.weatherapi.com/docs/) | API meteorológica del ejercicio Meteo |
 | [Unsplash — Textures](https://unsplash.com/t/textures-patterns) | Imágenes de fondo aleatorias |
+<<<<<<< HEAD
 | [The Odin Project](https://www.theodinproject.com) | Recurso complementario Full Stack |
 | [Dev.to — Software Architecture](https://dev.to/hamedi/software-architecture-for-developers-4g56) | Referencia arquitectura de software |
 | [Bytebytego](https://bytebytego.com/guides/the-ultimate-software-architect-knowledge-map/) | Mapa de conocimiento de arquitectura |
 | [GitHub Copilot](https://github.com/features/copilot) | Asistente IA integrado en VS Code |
 | [Bootstrap Icons](https://icons.getbootstrap.com) | Librería de iconos SVG |
 | [Devôt — Design Patterns](https://devot.team/blog/design-patterns) | Patrones de diseño en desarrollo |
+=======
+| [Bootstrap Icons](https://icons.getbootstrap.com) | Librería de iconos SVG |
+| [Claude](https://claude.com/) | IA para depuración y ayuda |
+>>>>>>> 3a8638b208893b0aae6f2f5694094001201cd0b7
 
 ---
 
@@ -181,5 +191,8 @@ Full Stack Developer · The Bridge, promoción marzo 2026
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mariosimarro)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/msimgit)
+<<<<<<< HEAD
 
 *Desarrollado por [Mario Simarro](https://www.linkedin.com/in/mariosimarro) · PixelForge Dev Studio*
+=======
+>>>>>>> 3a8638b208893b0aae6f2f5694094001201cd0b7
