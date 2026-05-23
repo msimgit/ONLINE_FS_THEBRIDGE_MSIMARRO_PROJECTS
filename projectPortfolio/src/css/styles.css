@@ -1,0 +1,288 @@
+/* ── Variables globales ───────────────────── */
+:root {
+  --nav-height: 64px;
+  --nav-bg: #1a1a1a;
+  --accent: #e94560;
+  --accent-hover: #c73050;
+  --logo-size: calc(var(--nav-height) - 16px);
+}
+
+/* ── Reset básico ─────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #111;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  padding-top: var(--nav-height);
+}
+
+/* ── Navbar ───────────────────────────────── */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--nav-height);
+  background: var(--nav-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  z-index: 1000;
+  border-bottom: 1px solid #333;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Logo centrado ────────────────────────── */
+.nav-logo-link {
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo {
+  height: var(--logo-size);
+  width: auto;
+  display: block;
+  transition: opacity 0.2s;
+}
+
+.nav-logo:hover {
+  opacity: 0.8;
+}
+
+/* ── Dashboard ────────────────────────────── */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 300px));
+  gap: 24px;
+  padding: 40px 32px;
+  justify-content: center;
+}
+
+@media (min-width: 1400px) {
+  .dashboard {
+    grid-template-columns: repeat(3, 300px);
+  }
+}
+
+/* ── Flip card wrapper ────────────────────── */
+.card {
+  perspective: 800px;
+  height: 260px;
+  cursor: default;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.55s ease;
+  transform-style: preserve-3d;
+}
+
+.card:hover .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Cara frontal y trasera */
+.card-front,
+.card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 28px 24px;
+}
+
+/* ── Cara frontal ─────────────────────────── */
+.card-front {
+  background: #1a1a1a;
+  border: 1px solid #333;
+}
+
+.card:hover .card-front {
+  border-color: var(--accent);
+}
+
+/* Tarjeta destacada Sprint 6 */
+.card-featured .card-front {
+  border-color: rgba(233, 69, 96, 0.4);
+}
+
+.card-featured .card-front::before {
+  content: '★ Final';
+  position: absolute;
+  top: -1px;
+  right: 20px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  padding: 3px 10px;
+  border-radius: 0 0 8px 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.card-desc {
+  font-size: 13px;
+  color: #888;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.card-desc code {
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.card-hint {
+  font-size: 11px;
+  color: #444;
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+/* ── Cara trasera ─────────────────────────── */
+.card-back {
+  background: #1a1a1a;
+  border: 1px solid var(--accent);
+  transform: rotateY(180deg);
+  gap: 16px;
+}
+
+.card-back-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+/* ── Botones cara trasera ─────────────────── */
+.card-btn {
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* Tipo 1 — borde accent, transparente */
+.card-btn-ghost {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.card-btn-ghost:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Tipo 2 — relleno rojo */
+.card-btn-solid {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fff;
+}
+
+.card-btn-solid:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+/* ── Footer / franja background ──────────── */
+#bg-franja {
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  transition: background-image 1.5s ease-in-out;
+}
+
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    #111 0%,
+    rgba(233, 69, 96, 0.35) 50%,
+    #111 100%
+  );
+}
+
+/* ── Footer credits ───────────────────────── */
+.footer-credits {
+  position: relative;
+  top: 125px;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+}
+
+.footer-credits-inner {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 10px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(233, 69, 96, 0.25);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.footer-link {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.footer-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* ── Responsive ───────────────────────────── */
+@media (max-width: 600px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+    padding: 24px 16px;
+  }
+}
