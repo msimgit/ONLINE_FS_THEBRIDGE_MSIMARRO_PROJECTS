@@ -1,67 +1,63 @@
 # Ecommerce Backend — Project Break 2
 
-🚀 **Desplegado en producción**: https://ecommerce-backend-pb2.onrender.com
+Backend de un e-commerce de camisetas de fútbol, desarrollado como entrega del
+**Project Break 2** del módulo de backend (Sprints 7-12) de The Bridge.
+
+🚀 **API en producción**: https://ecommerce-backend-pb2.onrender.com
 📚 **Documentación interactiva (Swagger)**: https://ecommerce-backend-pb2.onrender.com/api/docs
+❤️ **Health check**: https://ecommerce-backend-pb2.onrender.com/health
 
-> Nota: el plan free de Render "duerme" tras un rato de inactividad; la primera
-> petición tras un período sin uso puede tardar unos segundos en responder
-> mientras el servicio despierta.
+> El plan free de Render "duerme" el servicio tras un rato de inactividad. La
+> primera petición tras un período sin uso puede tardar unos segundos en
+> responder mientras el servicio despierta; es comportamiento normal del plan,
+> no un fallo de la API.
 
-Backend "React Ready" construido con Express 5, Prisma 7 (PostgreSQL/Supabase) y
-Mongoose (MongoDB Atlas). JWT en cookie httpOnly para autenticación.
+## Qué hace el proyecto
+
+Es la API de un e-commerce: catálogo de productos (camisetas de las selecciones
+clasificadas a dieciseisavos de final del Mundial 2026), autenticación con
+roles, reviews y wishlist por usuario, carrito de compra y checkout
+transaccional con historial de pedidos.
 
 ## Stack
 
 - Node.js + Express 5
 - Prisma 7 + `@prisma/adapter-pg` → PostgreSQL (Supabase): `User`, `Product`, `Cart`, `CartItem`, `Order`, `OrderItem`
 - Mongoose → MongoDB Atlas: `Review`, `Wishlist`
-- JWT (cookie httpOnly) + bcryptjs
-- Swagger UI en `/api/docs`
+- JWT en cookie httpOnly + bcryptjs, para autenticación y roles (`USER` / `ADMIN`)
+- Cloudinary, para las imágenes de los productos
+- Swagger UI, para la documentación interactiva
+- Jest + Supertest, para los tests automáticos
+- Desplegado en Render
 
-## Desarrollo local
+## Funcionalidades implementadas
 
-```bash
-npm install
-cp .env.example .env   # y rellena con tus credenciales reales
-npx prisma generate
-npx prisma db push
-npm run dev
-```
+**Autenticación y autorización** — `POST /api/auth/register`, `POST /api/auth/login`,
+`POST /api/auth/logout`, `GET /api/me`. JWT guardado en cookie httpOnly; rutas
+protegidas con middlewares `authenticate` y `requireRole("ADMIN")`.
 
-Cada vez que se modifique `prisma/schema.prisma` (nuevo modelo o campo), hay que repetir:
-```bash
-npx prisma generate
-npx prisma db push
-```
+**Productos** — CRUD completo (`GET`/`POST`/`PUT`/`DELETE /api/products`),
+lectura pública y escritura solo para ADMIN. Soporta búsqueda (`?search=`) y
+orden por precio (`?sort=price_asc|price_desc`).
 
-## Documentación de la API
+**Reviews y wishlist** (MongoDB) — `GET`/`POST /api/products/:id/reviews`,
+`DELETE /api/reviews/:reviewId`, y `GET`/`POST`/`DELETE /api/wishlist/:productId`.
+Antes de escribir en Mongo se valida en Postgres que el producto exista.
 
-Con el servidor corriendo: **http://localhost:3000/api/docs**
+**Carrito y checkout** — `GET /api/cart`, `POST /api/cart/items`,
+`PUT`/`DELETE /api/cart/items/:itemId`, y `POST /api/cart/checkout`. El checkout
+corre dentro de una transacción (`prisma.$transaction`): comprueba stock,
+lo descuenta, crea el `Order` con el precio congelado en `priceAtPurchase`, y
+pasa el carrito a `CHECKED_OUT` (queda como historial; el siguiente `addItem`
+crea automáticamente un carrito `ACTIVE` nuevo).
 
-## Variables de entorno
+**Pedidos** — `GET /api/orders` (historial del usuario) y
+`POST /api/orders/:id/return`, una funcionalidad añadida por iniciativa propia
+(no pedida en el enunciado): repone el stock de cada producto del pedido y lo
+marca como `RETURNED`, también de forma transaccional.
 
-Ver `.env.example`. Resumen:
-
-| Variable | Para qué |
-|---|---|
-| `DATABASE_URL` / `DIRECT_URL` | Conexión a Supabase (pooler / directa) |
-| `MONGO_URI` | Conexión a MongoDB Atlas |
-| `JWT_SECRET` / `JWT_EXPIRES_IN` | Firma de los JWT |
-| `CLIENT_URL` | Origen permitido en CORS (la URL del frontend React) |
-| `PORT` / `NODE_ENV` | Puerto del servidor y entorno |
-| `CLOUDINARY_*` | Subida de imágenes (Parte 7) |
-
-## Subida de imágenes (Cloudinary)
-
-`POST /api/products/:id/image` (solo ADMIN, `multipart/form-data`, campo `image`).
-Necesitas una cuenta gratuita en https://cloudinary.com y rellenar en `.env`:
-`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
-(Dashboard de Cloudinary → los tres valores están ahí arriba, listos para copiar).
-
-```bash
-curl -i -b cookies.txt -X POST http://localhost:3000/api/products/ID_DEL_PRODUCTO/image \
-  -F "image=@/ruta/a/camiseta-espana.jpg"
-```
+**Subida de imágenes** — `POST /api/products/:id/image` (solo ADMIN), sube el
+archivo a Cloudinary vía Multer y guarda la URL resultante en `imageUrl`.
 
 ## Modelo de datos
 
@@ -117,63 +113,70 @@ erDiagram
     }
 ```
 
-`Review` y `Wishlist` viven en MongoDB (no en este diagrama, que es de PostgreSQL):
-referencian `productId`/`userId` como strings sueltos, sin relación física real
-entre bases de datos (la integridad se valida desde el código, no desde el motor).
+`Review` y `Wishlist` viven en MongoDB (no en este diagrama, que es de
+PostgreSQL): referencian `productId`/`userId` como strings sueltos, sin
+relación física real entre bases de datos — la integridad se valida desde el
+código, no desde el motor.
 
-## Funcionalidad extra (no pedida en el enunciado)
+## Probar la API ya desplegada
 
-**Devolución de pedidos**: `POST /api/orders/:id/return` (usuario propietario del
-pedido o ADMIN). El enunciado del Project Break 2 no pide esta funcionalidad,
-pero tiene sentido en cualquier e-commerce real, así que se añadió por iniciativa
-propia, siguiendo el mismo patrón que el resto de la app:
+No hace falta clonar el repo ni instalar nada para probarla: usa directamente
+**https://ecommerce-backend-pb2.onrender.com/api/docs**, donde se pueden
+ejecutar todos los endpoints desde el navegador (botón "Try it out").
 
-- Repone el `stock` de cada producto del pedido (`stock: { increment: quantity }`).
-- Marca el pedido como `status: "RETURNED"` (no se borra; queda como historial).
-- Todo dentro de una `prisma.$transaction`, igual que el checkout: si algo falla,
-  no queda nada a medias.
-- Si el pedido ya estaba devuelto → `409`. Si quien lo pide no es el propietario
-  ni ADMIN → `403`.
+Ejemplo con `curl`:
 
-Esto añadió el enum `OrderStatus` (`COMPLETED` / `RETURNED`) al modelo `Order`
-en `prisma/schema.prisma`, y está cubierto por tests de integración en
-`tests/integration/cart.test.js` (reposición de stock, pedido ya devuelto,
-intento de devolución por un usuario que no es el dueño).
+```bash
+# Salud del servicio
+curl https://ecommerce-backend-pb2.onrender.com/health
+
+# Catálogo de productos
+curl https://ecommerce-backend-pb2.onrender.com/api/products
+
+# Registro de usuario
+curl -i -c cookies.txt -X POST https://ecommerce-backend-pb2.onrender.com/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"123456"}'
+
+# Usuario autenticado actual (usando la cookie guardada arriba)
+curl -b cookies.txt https://ecommerce-backend-pb2.onrender.com/api/me
+```
 
 ## Tests
 
 ```bash
 npm test
 ```
-Usa Jest + Supertest. Los tests de integración **mockean Prisma** (no tocan tu
-Supabase real ni MongoDB), así que puedes ejecutarlos en cualquier momento sin
-miedo a ensuciar datos. Cubren: validaciones, auth (register/login/me),
-productos (CRUD + permisos ADMIN) y el checkout transaccional del carrito
-(incluyendo el caso de stock insuficiente).
+34 tests con Jest + Supertest. Los de integración **mockean Prisma** (no tocan
+Supabase ni MongoDB reales), así que se pueden ejecutar en cualquier momento
+sin riesgo de ensuciar datos. Cubren: validaciones, autenticación
+(register/login/me), productos (CRUD + permisos de ADMIN), checkout
+transaccional del carrito (incluyendo stock insuficiente) y devolución de
+pedidos.
 
-## Despliegue en Render
+## Ejecutar el proyecto en local
 
-1. Sube el proyecto a un repo de GitHub (si no lo está ya).
-2. En [Render](https://render.com) → **New** → **Web Service** → conecta el repo.
-3. Configuración del servicio:
-   - **Build Command**: `npm install && npx prisma generate`
-   - **Start Command**: `npm start`
-   - **Environment**: Node
-4. En la pestaña **Environment** del servicio, añade TODAS las variables de `.env`
-   (con los valores reales) **excepto** `PORT` — Render lo asigna automáticamente
-   y nuestro `env.js` ya lo lee con `process.env.PORT`.
-5. Importante: pon `NODE_ENV=production` y `CLIENT_URL` apuntando a la URL real
-   donde despliegues el frontend (ej. `https://tu-frontend.vercel.app`), sin la
-   barra final. Esto activa automáticamente `secure: true` y `sameSite: "none"`
-   en la cookie de auth (necesario porque en producción frontend y backend
-   viven en dominios distintos).
-6. Despliega. La primera vez, como el build no ejecuta `db push`, asegúrate de
-   haber sincronizado el esquema contra la **misma** base de Supabase antes
-   (puedes hacerlo desde tu máquina apuntando al `.env` de producción, o añadir
-   `npx prisma db push` puntualmente al Build Command la primera vez).
-7. Verifica con `https://tu-backend.onrender.com/health` y
-   `https://tu-backend.onrender.com/api/docs`.
+```bash
+npm install
+cp .env.example .env   # y rellenar con credenciales propias de Supabase, MongoDB Atlas, JWT y Cloudinary
+npx prisma generate
+npx prisma db push
+npm run dev
+```
 
-### Nota sobre el plan free de Render
-Los servicios free "duermen" tras un rato de inactividad y tardan unos segundos
-en despertar con la siguiente petición — es normal, no es un fallo de la API.
+Servirá en `http://localhost:3000`, con su propia documentación en
+`http://localhost:3000/api/docs`.
+
+Cada vez que se modifique `prisma/schema.prisma` (nuevo modelo o campo), hay
+que repetir `npx prisma generate` y `npx prisma db push`.
+
+### Variables de entorno
+
+| Variable | Para qué |
+|---|---|
+| `DATABASE_URL` / `DIRECT_URL` | Conexión a Supabase (pooler / directa) |
+| `MONGO_URI` | Conexión a MongoDB Atlas |
+| `JWT_SECRET` / `JWT_EXPIRES_IN` | Firma de los JWT |
+| `CLIENT_URL` | Origen permitido en CORS (URL del frontend) |
+| `PORT` / `NODE_ENV` | Puerto del servidor y entorno |
+| `CLOUDINARY_*` | Credenciales para la subida de imágenes |
