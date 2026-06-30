@@ -12,12 +12,19 @@ Backend de un e-commerce de camisetas de fútbol, desarrollado como entrega del
 > responder mientras el servicio despierta; es comportamiento normal del plan,
 > no un fallo de la API.
 
-## Qué hace el proyecto
+## Sobre el proyecto
 
-Es la API de un e-commerce: catálogo de productos (camisetas de las selecciones
-clasificadas a dieciseisavos de final del Mundial 2026), autenticación con
-roles, reviews y wishlist por usuario, carrito de compra y checkout
-transaccional con historial de pedidos.
+Este proyecto es el backend de una tienda de camisetas de fútbol del **Mundial 2026**,
+desarrollado con fines estrictamente educativos como entrega del Project Break 2.
+El catálogo incluye las 32 selecciones clasificadas a dieciseisavos de final del
+torneo: una camiseta por selección, con descripción, precio, stock y una imagen
+representativa de cada equipo.
+
+Las imágenes del catálogo han sido generadas con herramientas de inteligencia
+artificial y están libres de derechos de autor. Se han creado expresamente para
+este ejercicio con el fin de evitar cualquier conflicto con marcas registradas,
+licencias deportivas o derechos de imagen asociados a las equipaciones reales.
+Su uso es exclusivamente ilustrativo y académico.
 
 ## Stack
 
