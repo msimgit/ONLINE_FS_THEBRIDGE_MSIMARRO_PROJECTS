@@ -1,5 +1,12 @@
 # Ecommerce Backend — Project Break 2
 
+🚀 **Desplegado en producción**: https://ecommerce-backend-pb2.onrender.com
+📚 **Documentación interactiva (Swagger)**: https://ecommerce-backend-pb2.onrender.com/api/docs
+
+> Nota: el plan free de Render "duerme" tras un rato de inactividad; la primera
+> petición tras un período sin uso puede tardar unos segundos en responder
+> mientras el servicio despierta.
+
 Backend "React Ready" construido con Express 5, Prisma 7 (PostgreSQL/Supabase) y
 Mongoose (MongoDB Atlas). JWT en cookie httpOnly para autenticación.
 
@@ -113,6 +120,25 @@ erDiagram
 `Review` y `Wishlist` viven en MongoDB (no en este diagrama, que es de PostgreSQL):
 referencian `productId`/`userId` como strings sueltos, sin relación física real
 entre bases de datos (la integridad se valida desde el código, no desde el motor).
+
+## Funcionalidad extra (no pedida en el enunciado)
+
+**Devolución de pedidos**: `POST /api/orders/:id/return` (usuario propietario del
+pedido o ADMIN). El enunciado del Project Break 2 no pide esta funcionalidad,
+pero tiene sentido en cualquier e-commerce real, así que se añadió por iniciativa
+propia, siguiendo el mismo patrón que el resto de la app:
+
+- Repone el `stock` de cada producto del pedido (`stock: { increment: quantity }`).
+- Marca el pedido como `status: "RETURNED"` (no se borra; queda como historial).
+- Todo dentro de una `prisma.$transaction`, igual que el checkout: si algo falla,
+  no queda nada a medias.
+- Si el pedido ya estaba devuelto → `409`. Si quien lo pide no es el propietario
+  ni ADMIN → `403`.
+
+Esto añadió el enum `OrderStatus` (`COMPLETED` / `RETURNED`) al modelo `Order`
+en `prisma/schema.prisma`, y está cubierto por tests de integración en
+`tests/integration/cart.test.js` (reposición de stock, pedido ya devuelto,
+intento de devolución por un usuario que no es el dueño).
 
 ## Tests
 
