@@ -41,3 +41,37 @@ export async function deleteReview(reviewId, requester) {
 
   await review.deleteOne();
 }
+
+// Media y nº de reviews de TODOS los productos en una sola agregación
+// (usado por product.service.js al listar el catálogo: evita N+1 consultas).
+// Devuelve un Map: productId -> { avgRating, reviewCount }
+export async function getAverageRatingsByProduct() {
+  const results = await Review.aggregate([
+    {
+      $group: {
+        _id: "$productId",
+        avgRating: { $avg: "$rating" },
+        reviewCount: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const map = new Map();
+  for (const r of results) {
+    map.set(r._id, { avgRating: r.avgRating, reviewCount: r.reviewCount });
+  }
+  return map;
+}
+
+// Media y nº de reviews de UN producto (usado en el detalle: no tiene
+// sentido traer la agregación completa de los 34 productos para mostrar uno).
+export async function getAverageRatingForProduct(productId) {
+  const [result] = await Review.aggregate([
+    { $match: { productId } },
+    { $group: { _id: null, avgRating: { $avg: "$rating" }, reviewCount: { $sum: 1 } } },
+  ]);
+
+  return result
+    ? { avgRating: result.avgRating, reviewCount: result.reviewCount }
+    : { avgRating: null, reviewCount: 0 };
+}
