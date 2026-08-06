@@ -1,0 +1,29 @@
+/* src/styles/variables.css */
+/* Paleta: dark theme + liquid glass con acento #e94560 */
+
+:root {
+  /* Fondos */
+  --color-bg: #111111;
+  --color-bg-elevated: #1a1a1a;
+
+  /* Acento (hardcodeado también donde haga falta, como en el portfolio) */
+  --color-accent: #e94560;
+  --color-accent-soft: rgba(233, 69, 96, 0.35);
+
+  /* Texto */
+  --color-text: #f5f5f7;
+  --color-text-muted: #a1a1a6;
+
+  /* Cristal (glassmorphism) */
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-bg-hover: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-blur: 20px;
+
+  /* Geometría */
+  --radius-card: 22px;
+  --radius-pill: 999px;
+
+  /* Transiciones */
+  --transition-smooth: 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}

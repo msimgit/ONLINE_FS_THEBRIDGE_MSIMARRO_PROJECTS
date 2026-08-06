@@ -1,0 +1,35 @@
+# Project Break 2 - Deploy en Render (Prioridad 1 del enunciado).
+# Define el servicio web para que Render lo cree automáticamente al detectar
+# este archivo en la raíz del repo ("New +" -> "Blueprint").
+# Las variables marcadas con sync: false NO se rellenan aquí (son secretos):
+# hay que pegarlas a mano una vez en el dashboard de Render tras el primer deploy.
+services:
+  - type: web
+    name: ecommerce-backend-pb2
+    runtime: node
+    plan: free
+    region: frankfurt
+    branch: main
+    buildCommand: npm install && npx prisma generate
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CLIENT_URL
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false

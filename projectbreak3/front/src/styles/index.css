@@ -1,0 +1,1254 @@
+@import "./variables.css";
+
+/* ============ RESET Y BASE ============ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+
+  /* Manchas de luz difusas: son lo que el cristal desenfoca */
+  background-image:
+    radial-gradient(
+      ellipse 600px 400px at 15% 10%,
+      rgba(233, 69, 96, 0.15),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 500px 350px at 85% 30%,
+      rgba(80, 120, 255, 0.1),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 700px 500px at 50% 90%,
+      rgba(233, 69, 96, 0.08),
+      transparent
+    );
+  background-attachment: fixed;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ============ LAYOUT ============ */
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.layout-content {
+  flex: 1; /* empuja el footer al fondo aunque haya poco contenido */
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+/* ============ HEADER (barra de cristal) ============ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 5%;
+  background: rgba(17, 17, 17, 0.65);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.header-logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.header-nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.header-nav a {
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  transition: all var(--transition-smooth);
+}
+
+.header-nav a:hover {
+  color: var(--color-text);
+  background: var(--glass-bg);
+}
+
+/* NavLink añade .active automáticamente en la ruta actual */
+.header-nav a.active {
+  color: var(--color-text);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.header-burger {
+  display: none; /* solo visible en móvil */
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* ============ BOTONES PILL ============ */
+.btn {
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 999px; /* tus pill buttons */
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: #e94560;
+  color: #fff;
+}
+.btn-secondary {
+  background: transparent;
+  color: #e94560;
+  border: 1px solid #e94560;
+}
+.btn-danger {
+  background: #c0392b;
+  color: #fff;
+}
+
+/* ============ AUTH (LOGIN / REGISTER) ============ */
+.auth-page {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.auth-page h1 {
+  margin-bottom: 2rem;
+}
+
+.auth-page form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  text-align: left;
+}
+
+.auth-page .btn {
+  align-self: center;
+  margin-top: 0.5rem;
+}
+
+/* FormInput: label envuelve texto + input; los separamos en columna */
+.form-input label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Mismo alto y borde en pastilla que .btn / .search-input */
+.form-input input {
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 400;
+  outline: none;
+  transition: all var(--transition-smooth);
+}
+
+.form-input input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 20px var(--color-accent-soft);
+}
+
+.form-input-error {
+  color: var(--color-accent);
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.form-error {
+  color: var(--color-accent);
+  text-align: center;
+}
+
+.auth-switch {
+  margin-top: 1.8rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.auth-switch a {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* ============ HOME HERO ============ */
+.home-hero {
+  text-align: center;
+  padding: 4rem 1rem 3rem;
+}
+
+.home-hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  margin-bottom: 0.5rem;
+}
+
+.home-hero p {
+  color: var(--color-text-muted);
+  margin-bottom: 2rem;
+}
+
+.home h2,
+.products-page h1 {
+  margin-bottom: 1.5rem;
+}
+
+/* ============ BUSCADOR (input de cristal) ============ */
+.search-input {
+  width: min(500px, 100%);
+  padding: 0.85rem 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--color-text);
+  font-size: 1rem;
+  outline: none;
+  transition: all var(--transition-smooth);
+}
+
+.search-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 20px var(--color-accent-soft);
+}
+
+.search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* ============ GRID CON FLEX ============ */
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+/* ============ PRODUCT CARD (cristal + halo) ============ */
+.product-card {
+  flex: 1 1 250px; /* crece, encoge, base 250px */
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-card);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  overflow: hidden; /* la imagen respeta el radio al escalar */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  transition: all var(--transition-smooth);
+}
+
+/* El <Link> (imagen + body) crece para ocupar el espacio sobrante; así el
+   footer (botón + rating) siempre queda pegado abajo, tenga o no la card
+   la línea de "¡Últimas unidades!" o el badge de valoración */
+.product-card > a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  background: var(--glass-bg-hover);
+  border-color: var(--color-accent-soft);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    0 0 35px var(--color-accent-soft); /* el halo */
+}
+
+.product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  transition: transform var(--transition-smooth);
+}
+
+.product-card:hover img {
+  transform: scale(1.06); /* zoom suave de la camiseta */
+}
+
+.product-card-body {
+  padding: 1.2rem;
+}
+
+.product-card-body h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.4rem;
+}
+
+.product-card-price {
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.product-card-low-stock {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: #ffb86c;
+}
+
+.product-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0 1.2rem 1.2rem;
+}
+
+.product-card-rating {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1rem; /* mismo padding vertical que .btn, para igualar altura */
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--color-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ============ APARICIÓN AL SCROLL (estrellas de cine) ============ */
+/* CSS scroll-driven animations: la animación avanza según la tarjeta
+   entra en el viewport. Sin JavaScript. */
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.92);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .product-card {
+    animation: card-enter linear both;
+    animation-timeline: view();
+    /* la animación transcurre mientras la tarjeta recorre
+       del 0% al 40% de su entrada en pantalla */
+    animation-range: entry 0% entry 40%;
+  }
+}
+
+/* Accesibilidad: sin animaciones si el usuario las tiene desactivadas */
+@media (prefers-reduced-motion: reduce) {
+  .product-card {
+    animation: none;
+  }
+}
+
+/* ============ DETALLE DE PRODUCTO ============ */
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-muted);
+  transition: color var(--transition-smooth);
+}
+
+.back-link:hover {
+  color: var(--color-accent);
+}
+
+.product-detail {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.product-detail-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  /* stretch (no flex-start): así ambas columnas igualan su altura y el
+     botón de wishlist, empujado al fondo con margin-top:auto, queda a la
+     misma altura que "Añadir al carrito" en la columna de info */
+  align-items: stretch;
+  padding: 2rem;
+  border-radius: var(--radius-card);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Media al 60% del tamaño anterior (320px base / 420px máx → 192px / 252px) */
+.product-detail-media {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1 1 192px;
+  max-width: 252px;
+}
+
+.product-detail-image-wrap {
+  position: relative;
+}
+
+.product-detail-image-wrap img {
+  width: 100%;
+  border-radius: calc(var(--radius-card) - 8px);
+  box-shadow: 0 0 45px var(--color-accent-soft);
+}
+
+.product-detail-wishlist-btn {
+  margin-top: auto;
+  text-align: center;
+}
+
+.product-detail-zoom-btn {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: rgba(17, 17, 17, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--color-text);
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-smooth);
+}
+
+.product-detail-zoom-btn:hover {
+  border-color: var(--color-accent);
+  background: var(--glass-bg-hover);
+}
+
+/* Popup de imagen ampliada */
+.image-zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.image-zoom-content {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: var(--radius-card);
+  box-shadow: 0 0 60px var(--color-accent-soft);
+}
+
+.image-zoom-close {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 301;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.product-detail-info {
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.product-detail-heading h1 {
+  margin-bottom: 0.6rem;
+}
+
+.product-detail-subtitle {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.product-detail-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.product-price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.product-stock {
+  color: var(--color-text-muted);
+}
+
+.quantity-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.quantity-selector button {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: var(--glass-bg-hover);
+  color: var(--color-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background var(--transition-smooth);
+}
+
+.quantity-selector button:hover {
+  background: var(--color-accent);
+}
+
+.quantity-selector span {
+  min-width: 2ch;
+  text-align: center;
+  font-weight: 600;
+}
+
+.product-detail .btn-primary {
+  display: block;
+  width: fit-content;
+}
+
+/* ============ 404 Y SIN RESULTADOS ============ */
+.not-found {
+  text-align: center;
+  padding: 5rem 1rem;
+}
+
+.not-found h1 {
+  font-size: 6rem;
+  color: var(--color-accent);
+  text-shadow: 0 0 40px var(--color-accent-soft);
+}
+
+.not-found p {
+  color: var(--color-text-muted);
+  margin: 1rem 0 2rem;
+}
+
+.no-results {
+  color: var(--color-text-muted);
+  padding: 2rem 0;
+}
+
+/* ============ CART ITEM Y SUMMARY ============ */
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem;
+  border-radius: var(--radius-card);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  transition: all var(--transition-smooth);
+}
+
+.cart-item:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--color-accent-soft);
+}
+
+.cart-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: calc(var(--radius-card) - 10px);
+  flex-shrink: 0;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-info h3 {
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.cart-item-info p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.cart-item-subtotal {
+  font-weight: 700;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.cart-item-remove-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.cart-item-remove-icon:hover {
+  color: var(--color-accent);
+  background: var(--glass-bg-hover);
+}
+
+.cart-summary {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cart-summary-total {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* ============ WISHLIST ============ */
+.wishlist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wishlist-item {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem;
+  border-radius: var(--radius-card);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  transition: all var(--transition-smooth);
+}
+
+.wishlist-item:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--color-accent-soft);
+}
+
+.wishlist-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: calc(var(--radius-card) - 10px);
+  flex-shrink: 0;
+}
+
+.wishlist-item-info {
+  flex: 1;
+}
+
+.wishlist-item-info h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.3rem;
+}
+
+.wishlist-item-info p {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.header-nav-button {
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  transition: all var(--transition-smooth);
+}
+
+.header-nav-button:hover {
+  color: var(--color-text);
+  background: var(--glass-bg);
+}
+
+/* Botón "pastilla" con borde visible: lo usan Home y Productos —
+   mayor especificidad (.header-nav a.clase) para ganarle al estilo
+   base de .header-nav a */
+.header-nav a.header-pill-link,
+.header-pill-link {
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all var(--transition-smooth);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-nav a.header-pill-link:hover,
+.header-nav a.header-pill-link.active,
+.header-pill-link:hover,
+.header-pill-link.active {
+  border-color: var(--color-accent);
+  background: var(--glass-bg);
+  color: var(--color-text);
+}
+
+/* Contenedor de login + iconos: los mantiene juntos, pegados a la derecha */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* ============ ICONOS DEL HEADER (carrito, perfil) ============ */
+/* Mismo hover que el resto del menú: se vuelve blanco. Si el panel
+   correspondiente está abierto (.active), se queda blanco fijo. */
+.header-icon-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.4rem;
+  transition: color var(--transition-smooth);
+}
+
+.header-icon-button:hover,
+.header-icon-button.active {
+  color: var(--color-text);
+}
+
+.header-cart-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============ DRAWER (panel lateral genérico: carrito y perfil) ============ */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(400px, 100%);
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-left: 1px solid var(--glass-border);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.45);
+  animation: drawer-slide-in var(--transition-smooth);
+}
+
+@keyframes drawer-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.drawer-header h2 {
+  font-size: 1.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drawer-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.drawer-clear-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color var(--transition-smooth);
+}
+
+.drawer-clear-btn:hover {
+  color: var(--color-accent);
+}
+
+.drawer-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color var(--transition-smooth);
+}
+
+.drawer-close:hover {
+  color: var(--color-text);
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+}
+
+.drawer-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.drawer-footer .btn {
+  text-align: center;
+}
+
+/* Menú del ProfileDrawer: Perfil / Wishlist / Cerrar sesión */
+.drawer-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.drawer-menu-link {
+  padding: 1rem 1.5rem;
+  color: var(--color-text);
+  background: none;
+  border: none;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--transition-smooth);
+}
+
+.drawer-menu-link:hover {
+  background: var(--glass-bg);
+}
+
+.drawer-menu-button {
+  color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer {
+    animation: none;
+  }
+}
+
+/* ============ REVIEWS (card del mismo ancho que product-detail-card) ============ */
+.product-reviews {
+  padding: 2rem;
+  border-radius: var(--radius-card);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.product-reviews h2 {
+  margin-bottom: 1.2rem;
+}
+
+.review-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.review-card {
+  flex: 1 1 220px;
+  max-width: 260px;
+  padding: 1rem;
+  border-radius: calc(var(--radius-card) - 8px);
+  background: var(--glass-bg-hover);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.review-comment {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.review-date {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+  font-size: 0.75rem;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.review-form label {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.review-form-rating {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.star-rating {
+  color: var(--color-accent);
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+
+.star-rating-interactive {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.star-rating-star {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--color-accent);
+  cursor: pointer;
+  transition: transform var(--transition-smooth);
+}
+
+.star-rating-star:hover {
+  transform: scale(1.15);
+}
+
+.review-form textarea {
+  padding: 0.6rem 1.2rem;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--color-text);
+  font: inherit;
+  outline: none;
+  transition: all var(--transition-smooth);
+  min-height: 100px;
+  resize: vertical;
+}
+
+.review-form textarea:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 20px var(--color-accent-soft);
+}
+
+.review-login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+/* ============ CHECKOUT SUCCESS ============ */
+.checkout-success {
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  text-align: center;
+}
+
+.receipt-order-id {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Mismo contenedor "glass" que el drawer, pero como bloque estático
+   de página (no fijo/lateral): envuelve los .cart-item + .cart-summary
+   reutilizados tal cual del carrito. */
+.checkout-summary-card {
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: var(--radius-card);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  text-align: left;
+}
+
+.checkout-summary-card .cart-summary {
+  justify-content: flex-end;
+  border-top: 1px dashed var(--glass-border);
+}
+
+/* ============ PERFIL Y HISTORIAL DE PEDIDOS ============ */
+.profile-page {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.profile-page h2 {
+  margin: 2rem 0 1.2rem;
+}
+
+.profile-info-card {
+  padding: 1.5rem 2rem;
+  border-radius: var(--radius-card);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.profile-info-card h1 {
+  margin-bottom: 0.5rem;
+}
+
+.profile-email {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.profile-member-since {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+.order-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-card {
+  padding: 1.5rem;
+  border-radius: var(--radius-card);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.order-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px dashed var(--glass-border);
+}
+
+.order-card-id {
+  font-weight: 700;
+}
+
+.order-card-date {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+.order-status {
+  flex-shrink: 0;
+  padding: 0.3rem 0.9rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.order-status-returned {
+  color: var(--color-accent);
+  border-color: var(--color-accent-soft);
+  background: var(--color-accent-soft);
+}
+
+.order-card .cart-item {
+  background: transparent;
+}
+
+.order-card .cart-summary {
+  border-top: 1px dashed var(--glass-border);
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  border-top: 1px solid var(--glass-border);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.footer p:first-child {
+  margin-bottom: 0.3rem;
+}
+
+/* ============ RESPONSIVE / MENÚ MÓVIL ============ */
+@media (max-width: 640px) {
+  .header-burger {
+    display: block;
+  }
+
+  .header-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    padding: 1rem 5%;
+    background: rgba(17, 17, 17, 0.92);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-bottom: 1px solid var(--glass-border);
+
+    /* cerrado por defecto */
+    display: none;
+  }
+
+  /* la clase .open la pone el useState del Header */
+  .header-nav.open {
+    display: flex;
+  }
+}
+
+/* ============ Un toque opcional de CSS para que los mensajes de estado no queden como texto suelto  ============ */
+.status-message {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #888;
+}
+
+.status-message.error {
+  color: #e94560;
+}
