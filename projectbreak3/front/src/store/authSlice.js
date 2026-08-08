@@ -131,4 +131,9 @@ const authSlice = createSlice({
   },
 });
 
+// Selector: deriva si el usuario actual es admin a partir de su rol
+export const selectIsAdmin = (state) => {
+  return state.auth.user?.role === "ADMIN";
+};
+
 export default authSlice.reducer;

@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 // Envuelve rutas que requieren sesión.
 // Mientras authChecked sea false, no decidimos nada todavía (evita un

@@ -30,8 +30,10 @@ model Product {
   name        String
   description String?
   price       Float
+  salePrice   Float?
   stock       Int      @default(0)
   imageUrl    String?
+  isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -72,13 +74,14 @@ enum OrderStatus {
 }
 
 model Order {
-  id        String      @id @default(cuid())
-  userId    String
-  user      User        @relation(fields: [userId], references: [id])
-  total     Float
-  status    OrderStatus @default(COMPLETED)
-  items     OrderItem[]
-  createdAt DateTime    @default(now())
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  total           Float
+  status          OrderStatus @default(COMPLETED)
+  items           OrderItem[]
+  stripeSessionId String?     @unique   // NUEVO: idempotencia + lookup desde el frontend
+  createdAt       DateTime    @default(now())
 }
 
 model OrderItem {

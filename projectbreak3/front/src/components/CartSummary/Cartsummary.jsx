@@ -1,38 +1,48 @@
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { checkout } from "../../store/cartSlice";
+import { useState } from "react";
+import { createCheckoutSession } from "../../api/checkout";
 
 // items = cart.items — el backend no manda total, lo calculamos aquí
-// onCheckoutSuccess (opcional): lo pasa CartDrawer para cerrarse tras el
-// checkout; CartPage no lo necesita (no hay panel que cerrar) y no lo pasa.
-function CartSummary({ items, onCheckoutSuccess }) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+function CartSummary({ items }) {
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [error, setError] = useState(null);
 
+  // Precio EFECTIVO: si el producto tiene oferta activa, se cobra ese;
+  // si no, el normal. Debe coincidir con lo que usa CartItem.jsx para
+  // cada línea individual (si no, el total no cuadraría con la suma
+  // de subtotales que ve el usuario).
   const total = items.reduce(
-    (acc, item) => acc + item.quantity * item.product.price,
+    (acc, item) =>
+      acc + item.quantity * (item.product.salePrice ?? item.product.price),
     0,
   );
 
   const handleCheckout = async () => {
+    setError(null);
+    setIsRedirecting(true);
     try {
-      await dispatch(checkout()).unwrap();
-      onCheckoutSuccess?.();
-      navigate("/checkout");
-    } catch {
-      // El error ya queda en state.cart.error; CartPage lo puede mostrar
+      const url = await createCheckoutSession(
+        items.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        })),
+      );
+      window.location.href = url; // redirección a Stripe Checkout
+    } catch (err) {
+      setError(err.response?.data?.error || "Error al iniciar el pago");
+      setIsRedirecting(false);
     }
   };
 
   return (
     <div className="cart-summary">
       <p className="cart-summary-total">Total: {total.toFixed(2)} €</p>
+      {error && <p className="status-message error">{error}</p>}
       <button
         className="btn btn-primary"
         onClick={handleCheckout}
-        disabled={items.length === 0}
+        disabled={items.length === 0 || isRedirecting}
       >
-        Finalizar compra
+        {isRedirecting ? "Redirigiendo..." : "Finalizar compra"}
       </button>
     </div>
   );

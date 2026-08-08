@@ -7,6 +7,7 @@ import reviewTopLevelRoutes from "./reviewTopLevel.routes.js";
 import wishlistRoutes from "./wishlist.routes.js";
 import cartRoutes from "./cart.routes.js";
 import orderRoutes from "./order.routes.js";
+import checkoutRoutes from "./checkout.routes.js";
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use("/reviews", reviewTopLevelRoutes); // DELETE /reviews/:reviewId
 router.use("/wishlist", wishlistRoutes);
 router.use("/cart", cartRoutes);
 router.use("/orders", orderRoutes);
+router.use("/checkout", checkoutRoutes); // Stripe: crea la sesión de pago
 
 export default router;

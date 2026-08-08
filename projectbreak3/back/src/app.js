@@ -28,7 +28,7 @@ app.use(
   cors({
     origin: env.clientUrl,
     credentials: true,
-  })
+  }),
 );
 
 // Rate limit general (protege login/registro de fuerza bruta entre otros)

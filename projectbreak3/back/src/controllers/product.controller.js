@@ -1,5 +1,7 @@
 // Sprint 8 (capas controller/service) + Sprint 9 (CRUD con Prisma).
 // uploadProductImage añadido en Project Break 2 - Mejora opcional 1 (Cloudinary).
+// getAdminProducts añadido junto con isActive: el admin necesita ver también
+// los productos ocultos, algo que el listado público nunca debe devolver.
 import * as productService from "../services/product.service.js";
 import { uploadImageBuffer } from "../services/upload.service.js";
 import { ok, fail } from "../utils/response.js";
@@ -7,6 +9,19 @@ import { ok, fail } from "../utils/response.js";
 export async function getProducts(req, res, next) {
   try {
     const products = await productService.getAllProducts(req.query);
+    return ok(res, { products });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Solo ADMIN (protegido en las rutas): incluye productos con isActive:false.
+export async function getAdminProducts(req, res, next) {
+  try {
+    const products = await productService.getAllProducts({
+      ...req.query,
+      includeInactive: true,
+    });
     return ok(res, { products });
   } catch (err) {
     next(err);
@@ -45,6 +60,13 @@ export async function deleteProduct(req, res, next) {
     await productService.deleteProduct(req.params.id);
     return ok(res, { message: "Producto eliminado correctamente." });
   } catch (err) {
+    if (err.code === "P2003") {
+      return fail(
+        res,
+        "No se puede eliminar este producto porque tiene pedidos asociados.",
+        409,
+      );
+    }
     next(err);
   }
 }
@@ -56,7 +78,10 @@ export async function uploadProductImage(req, res, next) {
     }
 
     const result = await uploadImageBuffer(req.file.buffer);
-    const product = await productService.setProductImage(req.params.id, result.secure_url);
+    const product = await productService.setProductImage(
+      req.params.id,
+      result.secure_url,
+    );
 
     return ok(res, { product });
   } catch (err) {

@@ -3,7 +3,7 @@ import {
   fetchCartRequest,
   addCartItemRequest,
   removeCartItemRequest,
-  checkoutRequest,
+  getOrderBySessionRequest,
 } from "../api/cart";
 
 // Guardamos el objeto "cart" completo tal como lo devuelve el backend
@@ -17,6 +17,8 @@ const initialState = {
 
 const extractError = (error, fallback) =>
   error.response?.data?.error || fallback;
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
@@ -81,12 +83,27 @@ export const clearCart = createAsyncThunk(
   },
 );
 
-export const checkout = createAsyncThunk(
-  "cart/checkout",
-  async (_, { rejectWithValue }) => {
+// El pedido lo crea el webhook de Stripe, no este thunk. Aquí solo se
+// CONSULTA por sessionId, con un par de reintentos cortos por si el
+// webhook aún no ha llegado cuando el navegador ya redirigió a
+// /checkout/success (son dos caminos independientes desde Stripe:
+// el webhook al backend, y el 303 al navegador; no hay garantía de
+// cuál llega antes).
+const MAX_ATTEMPTS = 5;
+const RETRY_DELAY_MS = 1500;
+
+export const confirmOrderBySession = createAsyncThunk(
+  "cart/confirmOrderBySession",
+  async (sessionId, { rejectWithValue }) => {
     try {
-      const { order } = await checkoutRequest();
-      return order;
+      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        const { order } = await getOrderBySessionRequest(sessionId);
+        if (order) return order;
+        if (attempt < MAX_ATTEMPTS) await sleep(RETRY_DELAY_MS);
+      }
+      return rejectWithValue(
+        "Tu pago se está confirmando. Si tarda más de un minuto, revisa tu email o contacta con soporte.",
+      );
     } catch (error) {
       return rejectWithValue(
         extractError(error, "Error al confirmar el pedido"),
@@ -153,17 +170,17 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // checkout
-      .addCase(checkout.pending, (state) => {
+      // confirmOrderBySession
+      .addCase(confirmOrderBySession.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(checkout.fulfilled, (state, action) => {
+      .addCase(confirmOrderBySession.fulfilled, (state, action) => {
         state.loading = false;
         state.order = action.payload;
         state.cart = null; // tras el pedido, el carrito queda vacío
       })
-      .addCase(checkout.rejected, (state, action) => {
+      .addCase(confirmOrderBySession.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

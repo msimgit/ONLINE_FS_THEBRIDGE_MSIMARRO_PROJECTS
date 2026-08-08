@@ -12,18 +12,44 @@ const router = Router();
 
 // Públicas
 router.get("/", productController.getProducts);
+
+// Admin: ve también los productos con isActive:false
+router.get(
+  "/admin/all",
+  authenticate,
+  requireRole("ADMIN"),
+  productController.getAdminProducts,
+);
+
 router.get("/:id", productController.getProduct);
 
 // Protegidas (solo ADMIN)
-router.post("/", authenticate, requireRole("ADMIN"), validateProduct, productController.createProduct);
-router.put("/:id", authenticate, requireRole("ADMIN"), validateProduct, productController.updateProduct);
-router.delete("/:id", authenticate, requireRole("ADMIN"), productController.deleteProduct);
+router.post(
+  "/",
+  authenticate,
+  requireRole("ADMIN"),
+  validateProduct,
+  productController.createProduct,
+);
+router.put(
+  "/:id",
+  authenticate,
+  requireRole("ADMIN"),
+  validateProduct,
+  productController.updateProduct,
+);
+router.delete(
+  "/:id",
+  authenticate,
+  requireRole("ADMIN"),
+  productController.deleteProduct,
+);
 router.post(
   "/:id/image",
   authenticate,
   requireRole("ADMIN"),
   upload.single("image"),
-  productController.uploadProductImage
+  productController.uploadProductImage,
 );
 
 // Reviews anidadas: GET/POST /api/products/:id/reviews

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { useOrders } from "../../hooks/useOrders";
 import { formatDate } from "../../utils/formatDate";
 
@@ -71,7 +72,15 @@ function ProfilePage() {
               <div className="cart-items">
                 {order.items.map((item) => (
                   <article key={item.id} className="cart-item">
-                    <img src={item.product.imageUrl} alt={item.product.name} />
+                    <Link
+                      to={`/products/${item.productId}`}
+                      className="cart-item-image-link"
+                    >
+                      <img
+                        src={item.product.imageUrl}
+                        alt={item.product.name}
+                      />
+                    </Link>
                     <div className="cart-item-info">
                       <h3>{item.product.name}</h3>
                       <p>

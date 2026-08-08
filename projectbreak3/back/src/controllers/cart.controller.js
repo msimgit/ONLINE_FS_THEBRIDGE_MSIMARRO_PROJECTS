@@ -26,7 +26,7 @@ export async function updateItem(req, res, next) {
     const cart = await cartService.updateItemQuantity(
       req.user.sub,
       req.params.itemId,
-      req.body.quantity
+      req.body.quantity,
     );
     return ok(res, { cart });
   } catch (err) {
@@ -43,10 +43,25 @@ export async function removeItem(req, res, next) {
   }
 }
 
-export async function checkout(req, res, next) {
+// checkout eliminado: crear un pedido ya no es algo que el cliente pida
+// directamente. Ahora lo dispara el webhook de Stripe (server-a-servidor)
+// cuando el pago se confirma de verdad. Este endpoint solo CONSULTA si
+// el pedido ya existe, para que CheckoutSuccessPage sepa qué mostrar.
+export async function getOrderBySessionId(req, res, next) {
   try {
-    const order = await cartService.checkout(req.user.sub);
-    return ok(res, { order }, 201);
+    const order = await cartService.getOrderBySessionId(
+      req.user.sub,
+      req.params.sessionId,
+    );
+
+    if (!order) {
+      // No es un error: es normal que el webhook aún no haya llegado
+      // (puede tardar un par de segundos respecto a la redirección del
+      // navegador). El frontend reintenta con un pequeño retraso.
+      return ok(res, { order: null });
+    }
+
+    return ok(res, { order });
   } catch (err) {
     next(err);
   }

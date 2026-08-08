@@ -112,11 +112,21 @@ a {
   cursor: pointer;
 }
 
-/* ============ BOTONES PILL ============ */
+/* ============================================================
+   SISTEMA DE BOTONES
+   Todo botón/link de acción del sitio debería ser uno de estos
+   4 tipos. Si necesitas un botón nuevo, primero mira si encaja
+   aquí antes de escribir una clase suelta.
+   ============================================================ */
+
+/* Tipo 1: .btn base + variante de color (relleno o contorno) */
 .btn {
+  display: inline-flex; /* evita el corte al contener bloques */
+  align-items: center;
+  justify-content: center;
   padding: 0.6rem 1.5rem;
   border: none;
-  border-radius: 999px; /* tus pill buttons */
+  border-radius: 999px;
   cursor: pointer;
   font-weight: 600;
 }
@@ -130,9 +140,78 @@ a {
   color: #e94560;
   border: 1px solid #e94560;
 }
+.btn-secondary:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
 .btn-danger {
   background: #c0392b;
   color: #fff;
+}
+
+/* Tipo 2: link/pill de navegación (header, sidebar admin, drawer) */
+.header-nav a.header-pill-link,
+.header-pill-link {
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all var(--transition-smooth);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-nav a.header-pill-link:hover,
+.header-nav a.header-pill-link.active,
+.header-pill-link:hover,
+.header-pill-link.active {
+  border-color: var(--color-accent);
+  background: var(--glass-bg);
+  color: var(--color-text);
+}
+
+/* Tipo 3: botón "fantasma" — texto plano, fondo solo al hover
+   (menús: drawer, header-nav-button) */
+.header-nav-button,
+.drawer-menu-link {
+  padding: 0.5rem 1.2rem;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  transition: all var(--transition-smooth);
+}
+
+.header-nav-button:hover,
+.drawer-menu-link:hover {
+  color: var(--color-text);
+  background: var(--glass-bg);
+}
+
+/* Tipo 4: botón icono circular (header, cantidad, cerrar overlays) */
+.header-icon-button,
+.product-detail-zoom-btn,
+.cart-item-remove-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.header-icon-button:hover,
+.header-icon-button.active,
+.product-detail-zoom-btn:hover,
+.cart-item-remove-icon:hover {
+  color: var(--color-text);
 }
 
 /* ============ AUTH (LOGIN / REGISTER) ============ */
@@ -169,26 +248,6 @@ a {
   font-weight: 600;
 }
 
-/* Mismo alto y borde en pastilla que .btn / .search-input */
-.form-input input {
-  padding: 0.6rem 1.5rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  color: var(--color-text);
-  font-size: 1rem;
-  font-weight: 400;
-  outline: none;
-  transition: all var(--transition-smooth);
-}
-
-.form-input input:focus {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 20px var(--color-accent-soft);
-}
-
 .form-input-error {
   color: var(--color-accent);
   font-size: 0.8rem;
@@ -209,6 +268,51 @@ a {
 .auth-switch a {
   color: var(--color-accent);
   font-weight: 600;
+}
+
+/* ============================================================
+   SISTEMA: INPUT PASTILLA
+   Todo campo de texto/textarea del sitio (login, búsqueda,
+   formulario admin) comparte esta base. Antes estaba copiada
+   3 veces con pequeñas variaciones de padding/ancho.
+   ============================================================ */
+.form-input input,
+.search-input,
+.admin-form-row input:not([type="checkbox"]),
+.admin-form-row textarea {
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--color-text);
+  font-size: 1rem;
+  outline: none;
+  transition: all var(--transition-smooth);
+}
+
+.form-input input:focus,
+.search-input:focus,
+.admin-form-row input:focus,
+.admin-form-row textarea:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 20px var(--color-accent-soft);
+}
+
+/* Delta de cada uno: tamaño/ancho/márgenes propios */
+.form-input input {
+  padding: 0.6rem 1.5rem;
+  font-weight: 400;
+}
+
+.search-input {
+  width: min(500px, 100%);
+  padding: 0.85rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.search-input::placeholder {
+  color: var(--color-text-muted);
 }
 
 /* ============ HOME HERO ============ */
@@ -232,31 +336,6 @@ a {
   margin-bottom: 1.5rem;
 }
 
-/* ============ BUSCADOR (input de cristal) ============ */
-.search-input {
-  width: min(500px, 100%);
-  padding: 0.85rem 1.5rem;
-  margin-bottom: 2rem;
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-pill);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  color: var(--color-text);
-  font-size: 1rem;
-  outline: none;
-  transition: all var(--transition-smooth);
-}
-
-.search-input:focus {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 20px var(--color-accent-soft);
-}
-
-.search-input::placeholder {
-  color: var(--color-text-muted);
-}
-
 /* ============ GRID CON FLEX ============ */
 .product-grid {
   display: flex;
@@ -267,6 +346,7 @@ a {
 
 /* ============ PRODUCT CARD (cristal + halo) ============ */
 .product-card {
+  position: relative; /* ancla para el ribbon de oferta */
   flex: 1 1 250px; /* crece, encoge, base 250px */
   max-width: 300px;
   display: flex;
@@ -386,6 +466,43 @@ a {
   }
 }
 
+/* ============================================================
+   SISTEMA: TARJETA DE CRISTAL
+   Contenedor "glass" reutilizado por detalle de producto, reviews,
+   resumen de checkout, perfil, pedidos, sidebar admin y formulario
+   admin. Antes esta misma declaración estaba copiada 8 veces.
+   ============================================================ */
+.product-detail-card,
+.product-reviews,
+.checkout-summary-card,
+.profile-info-card,
+.order-card,
+.admin-sidebar,
+.admin-form,
+.cart-item,
+.wishlist-item {
+  border-radius: var(--radius-card);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+}
+
+.product-detail-card,
+.product-reviews,
+.checkout-summary-card,
+.profile-info-card,
+.order-card,
+.admin-form {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.cart-item:hover,
+.wishlist-item:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--color-accent-soft);
+}
+
 /* ============ DETALLE DE PRODUCTO ============ */
 .back-link {
   display: inline-block;
@@ -415,12 +532,6 @@ a {
      misma altura que "Añadir al carrito" en la columna de info */
   align-items: stretch;
   padding: 2rem;
-  border-radius: var(--radius-card);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
 /* Media al 60% del tamaño anterior (320px base / 420px máx → 192px / 252px) */
@@ -458,13 +569,7 @@ a {
   background: rgba(17, 17, 17, 0.65);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: var(--color-text);
   font-size: 0.95rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-smooth);
 }
 
 .product-detail-zoom-btn:hover {
@@ -607,17 +712,7 @@ a {
   align-items: center;
   gap: 1.2rem;
   padding: 1rem;
-  border-radius: var(--radius-card);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
   transition: all var(--transition-smooth);
-}
-
-.cart-item:hover {
-  background: var(--glass-bg-hover);
-  border-color: var(--color-accent-soft);
 }
 
 .cart-item img {
@@ -653,12 +748,7 @@ a {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: none;
-  background: none;
-  color: var(--color-text-muted);
   font-size: 0.9rem;
-  cursor: pointer;
-  transition: all var(--transition-smooth);
 }
 
 .cart-item-remove-icon:hover {
@@ -681,6 +771,30 @@ a {
   font-weight: 700;
 }
 
+/* Contenedor estrecho tipo "ticket", igual que .checkout-success pero con
+   algo más de ancho porque aquí el carrito sigue siendo editable
+   (cantidades, botón eliminar) y necesita algo más de aire. */
+.cart-page {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.cart-page h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.cart-item-image-link {
+  display: block;
+  flex-shrink: 0;
+  border-radius: calc(var(--radius-card) - 10px);
+  transition: opacity var(--transition-smooth);
+}
+
+.cart-item-image-link:hover {
+  opacity: 0.85;
+}
+
 /* ============ WISHLIST ============ */
 .wishlist-items {
   display: flex;
@@ -693,17 +807,7 @@ a {
   align-items: center;
   gap: 1.2rem;
   padding: 1rem;
-  border-radius: var(--radius-card);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
   transition: all var(--transition-smooth);
-}
-
-.wishlist-item:hover {
-  background: var(--glass-bg-hover);
-  border-color: var(--color-accent-soft);
 }
 
 .wishlist-item img {
@@ -728,49 +832,6 @@ a {
   font-weight: 700;
 }
 
-.header-nav-button {
-  padding: 0.5rem 1.2rem;
-  border-radius: var(--radius-pill);
-  color: var(--color-text-muted);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font: inherit;
-  transition: all var(--transition-smooth);
-}
-
-.header-nav-button:hover {
-  color: var(--color-text);
-  background: var(--glass-bg);
-}
-
-/* Botón "pastilla" con borde visible: lo usan Home y Productos —
-   mayor especificidad (.header-nav a.clase) para ganarle al estilo
-   base de .header-nav a */
-.header-nav a.header-pill-link,
-.header-pill-link {
-  padding: 0.5rem 1.2rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--glass-border);
-  color: var(--color-text);
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: all var(--transition-smooth);
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.header-nav a.header-pill-link:hover,
-.header-nav a.header-pill-link.active,
-.header-pill-link:hover,
-.header-pill-link.active {
-  border-color: var(--color-accent);
-  background: var(--glass-bg);
-  color: var(--color-text);
-}
-
 /* Contenedor de login + iconos: los mantiene juntos, pegados a la derecha */
 .header-actions {
   display: flex;
@@ -778,25 +839,10 @@ a {
   gap: 0.6rem;
 }
 
-/* ============ ICONOS DEL HEADER (carrito, perfil) ============ */
-/* Mismo hover que el resto del menú: se vuelve blanco. Si el panel
-   correspondiente está abierto (.active), se queda blanco fijo. */
+/* ============ ICONOS DEL HEADER (tamaño/posición propios) ============ */
 .header-icon-button {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: var(--color-text-muted);
-  cursor: pointer;
   padding: 0.4rem;
-  transition: color var(--transition-smooth);
-}
-
-.header-icon-button:hover,
-.header-icon-button.active {
-  color: var(--color-text);
 }
 
 .header-cart-badge {
@@ -927,17 +973,7 @@ a {
 
 .drawer-menu-link {
   padding: 1rem 1.5rem;
-  color: var(--color-text);
-  background: none;
-  border: none;
   text-align: left;
-  font: inherit;
-  cursor: pointer;
-  transition: background var(--transition-smooth);
-}
-
-.drawer-menu-link:hover {
-  background: var(--glass-bg);
 }
 
 .drawer-menu-button {
@@ -953,12 +989,6 @@ a {
 /* ============ REVIEWS (card del mismo ancho que product-detail-card) ============ */
 .product-reviews {
   padding: 2rem;
-  border-radius: var(--radius-card);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
 .product-reviews h2 {
@@ -1043,19 +1073,8 @@ a {
 .review-form textarea {
   padding: 0.6rem 1.2rem;
   border-radius: 16px;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  color: var(--color-text);
-  font: inherit;
-  outline: none;
-  transition: all var(--transition-smooth);
   min-height: 100px;
   resize: vertical;
-}
-
-.review-form textarea:focus {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 20px var(--color-accent-soft);
 }
 
 .review-login-prompt {
@@ -1085,18 +1104,9 @@ a {
   margin-bottom: 0.6rem;
 }
 
-/* Mismo contenedor "glass" que el drawer, pero como bloque estático
-   de página (no fijo/lateral): envuelve los .cart-item + .cart-summary
-   reutilizados tal cual del carrito. */
 .checkout-summary-card {
   width: 100%;
   padding: 1.5rem;
-  border-radius: var(--radius-card);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
   text-align: left;
 }
 
@@ -1117,12 +1127,6 @@ a {
 
 .profile-info-card {
   padding: 1.5rem 2rem;
-  border-radius: var(--radius-card);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
 .profile-info-card h1 {
@@ -1148,12 +1152,6 @@ a {
 
 .order-card {
   padding: 1.5rem;
-  border-radius: var(--radius-card);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
 .order-card-header {
@@ -1242,7 +1240,7 @@ a {
   }
 }
 
-/* ============ Un toque opcional de CSS para que los mensajes de estado no queden como texto suelto  ============ */
+/* ============ Mensajes de estado ============ */
 .status-message {
   text-align: center;
   padding: 3rem 1rem;
@@ -1251,4 +1249,307 @@ a {
 
 .status-message.error {
   color: #e94560;
+}
+
+/* ============ ADMIN: SIDEBAR ============ */
+.admin-layout {
+  width: min(1000px, 92%);
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.admin-shell {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.admin-sidebar {
+  flex: 0 0 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.2rem;
+  position: sticky;
+  top: calc(1rem + 70px); /* deja hueco al header sticky del sitio */
+}
+
+/* Sin cápsula: mismo trato visual que el resto de la navegación,
+   solo se distingue por el peso de fuente al ser el nivel raíz. */
+.admin-sidebar-root {
+  display: block;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  color: var(--color-text);
+  font-weight: 700;
+  transition: background var(--transition-smooth);
+}
+
+.admin-sidebar-root:hover,
+.admin-sidebar-root.active {
+  background: var(--glass-bg-hover);
+}
+
+.admin-nav-tree {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.admin-nav-category-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.8rem;
+  background: none;
+  border: none;
+  border-radius: 10px;
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-smooth);
+}
+
+.admin-nav-category-toggle:hover {
+  background: var(--glass-bg-hover);
+}
+
+.admin-nav-chevron {
+  color: var(--color-text-muted);
+  transition: transform var(--transition-smooth);
+}
+
+.admin-nav-chevron.open {
+  transform: rotate(90deg);
+}
+
+.admin-nav-subitems {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-left: 1rem;
+  margin-top: 0.2rem;
+}
+
+.admin-nav-link {
+  display: block;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  border-left: 2px solid transparent;
+  transition: all var(--transition-smooth);
+}
+
+.admin-nav-link:hover {
+  color: var(--color-text);
+  background: var(--glass-bg-hover);
+}
+
+.admin-nav-link.active {
+  color: var(--color-text);
+  background: var(--glass-bg-hover);
+  border-left-color: var(--color-accent);
+}
+
+.admin-content {
+  flex: 1;
+  min-width: 0; /* evita que la tabla desborde el flex en móvil/tablet */
+}
+
+@media (max-width: 720px) {
+  .admin-shell {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    position: static;
+    width: 100%;
+  }
+}
+
+/* ============ ADMIN: TABLA DE PRODUCTOS ============ */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.9rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.admin-th-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+.admin-th-sort:hover {
+  color: var(--color-accent);
+}
+
+.admin-sort-arrow {
+  font-size: 0.7rem;
+  color: var(--color-accent);
+}
+
+.admin-table-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.6rem;
+  white-space: nowrap;
+}
+
+.admin-error {
+  color: var(--color-accent);
+  margin: 1rem 0;
+}
+
+.admin-row-inactive {
+  opacity: 0.5;
+}
+
+.admin-visibility-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.admin-visibility-toggle input {
+  width: auto;
+}
+
+/* ============ ADMIN: FORMULARIO (labels izq. / campos der.) ============ */
+.admin-form-page {
+  max-width: 640px;
+}
+
+.admin-form {
+  margin-top: 1.5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.admin-form-row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  align-items: start;
+  gap: 1rem;
+}
+
+.admin-form-row label {
+  padding-top: 0.6rem; /* alinea verticalmente con el input de al lado */
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.admin-form-row input:not([type="checkbox"]),
+.admin-form-row textarea {
+  width: 100%;
+  padding: 0.6rem 1.2rem;
+}
+
+.admin-form-row input[type="checkbox"] {
+  width: auto;
+  margin-top: 0.7rem;
+}
+
+.admin-form-sale-group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.admin-form-sale-group input[type="checkbox"] {
+  margin-top: 0;
+}
+
+.admin-form-row-submit {
+  margin-top: 0.5rem;
+}
+
+.admin-sale-field {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-sale-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.admin-sale-checkbox input {
+  width: auto;
+}
+
+@media (max-width: 560px) {
+  .admin-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-form-row label {
+    padding-top: 0;
+  }
+}
+
+/* ============ PRECIO DE OFERTA (ribbon + tachado) ============ */
+.product-card-sale-ribbon {
+  position: absolute;
+  top: 0.8rem;
+  left: -0.4rem;
+  z-index: 5;
+  padding: 0.3rem 0.9rem;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-radius: 0 999px 999px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.product-card-price-old,
+.product-price-old,
+.admin-price-old {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  font-weight: 400;
+  font-size: 0.9em;
+}
+
+.product-card-price-sale,
+.product-price-sale,
+.admin-price-sale {
+  color: var(--color-accent);
+  font-weight: 700;
 }

@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCart } from '../../store/cartSlice';
-import CartItem from '../../components/CartItem/CartItem';
-import CartSummary from '../../components/CartSummary/CartSummary';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart } from "../../store/cartSlice";
+import CartItem from "../../components/CartItem/CartItem";
+import CartSummary from "../../components/CartSummary/CartSummary";
 
 function CartPage() {
   const dispatch = useDispatch();
@@ -12,7 +12,8 @@ function CartPage() {
     dispatch(fetchCart());
   }, [dispatch]);
 
-  if (loading && !cart) return <p className="status-message">Cargando carrito...</p>;
+  if (loading && !cart)
+    return <p className="status-message">Cargando carrito...</p>;
   if (error) return <p className="status-message error">{error}</p>;
 
   const items = cart?.items ?? [];
@@ -24,14 +25,14 @@ function CartPage() {
       {items.length === 0 ? (
         <p className="status-message">Tu carrito está vacío.</p>
       ) : (
-        <>
+        <div className="checkout-summary-card">
           <div className="cart-items">
             {items.map((item) => (
               <CartItem key={item.id} item={item} />
             ))}
           </div>
           <CartSummary items={items} />
-        </>
+        </div>
       )}
     </section>
   );

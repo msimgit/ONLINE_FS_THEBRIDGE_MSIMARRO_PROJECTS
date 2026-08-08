@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { selectIsAdmin } from "../../store/authSlice";
 
 // Iconos como SVG (no emoji): así el hover puede cambiar su color con CSS,
 // algo que un emoji a color no permite.
@@ -50,6 +51,7 @@ function Header({
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const isAdmin = useSelector(selectIsAdmin);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -106,16 +108,20 @@ function Header({
           </button>
         )}
 
-        <button
-          className={`header-icon-button ${isCartOpen ? "active" : ""}`}
-          onClick={onCartClick}
-          aria-label="Abrir carrito"
-        >
-          <CartIcon />
-          {cartItemCount > 0 && (
-            <span className="header-cart-badge">{cartItemCount}</span>
-          )}
-        </button>
+        {/* Un admin gestiona la tienda, no compra en ella: sin acceso
+            al carrito mientras esté logueado con ese rol. */}
+        {!isAdmin && (
+          <button
+            className={`header-icon-button ${isCartOpen ? "active" : ""}`}
+            onClick={onCartClick}
+            aria-label="Abrir carrito"
+          >
+            <CartIcon />
+            {cartItemCount > 0 && (
+              <span className="header-cart-badge">{cartItemCount}</span>
+            )}
+          </button>
+        )}
       </div>
     </header>
   );

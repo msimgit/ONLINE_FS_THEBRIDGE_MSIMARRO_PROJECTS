@@ -1,4 +1,8 @@
 // Sprint 12 - Carrito y Checkout (transacción con prisma.$transaction).
+// withCartTotal añadido junto con salePrice: el total del carrito (antes de
+// pagar) se calcula en vivo con el precio EFECTIVO de cada producto
+// (salePrice si hay oferta activa, si no price), para que quede coherente
+// con lo que se cobrará realmente en el checkout.
 import prisma from "../config/prismaClient.js";
 import { AppError } from "../utils/AppError.js";
 
@@ -8,11 +12,25 @@ const cartInclude = {
   },
 };
 
+function effectivePrice(product) {
+  return product.salePrice ?? product.price;
+}
+
+function withCartTotal(cart) {
+  const total = cart.items.reduce(
+    (sum, item) => sum + effectivePrice(item.product) * item.quantity,
+    0,
+  );
+  return { ...cart, total };
+}
+
 // El usuario puede tener varios carritos a lo largo del tiempo (uno por cada
 // checkout que hace), pero solo UNO en estado ACTIVE a la vez. Es ese el que
 // usan todas las operaciones de "añadir/editar/quitar" mientras compra.
 async function getOrCreateActiveCartId(userId) {
-  const existing = await prisma.cart.findFirst({ where: { userId, status: "ACTIVE" } });
+  const existing = await prisma.cart.findFirst({
+    where: { userId, status: "ACTIVE" },
+  });
   if (existing) return existing.id;
 
   const created = await prisma.cart.create({ data: { userId } });
@@ -21,7 +39,11 @@ async function getOrCreateActiveCartId(userId) {
 
 export async function getCart(userId) {
   const cartId = await getOrCreateActiveCartId(userId);
-  return prisma.cart.findUnique({ where: { id: cartId }, include: cartInclude });
+  const cart = await prisma.cart.findUnique({
+    where: { id: cartId },
+    include: cartInclude,
+  });
+  return withCartTotal(cart);
 }
 
 async function ensureProduct(productId) {
@@ -49,12 +71,16 @@ export async function addItem(userId, productId, quantity) {
 // itemId es el id del propio CartItem (tal y como pide el enunciado:
 // DELETE /api/cart/items/:itemId), no el id del producto.
 export async function updateItemQuantity(userId, itemId, quantity) {
-  const cart = await prisma.cart.findFirst({ where: { userId, status: "ACTIVE" } });
+  const cart = await prisma.cart.findFirst({
+    where: { userId, status: "ACTIVE" },
+  });
   if (!cart) {
     throw new AppError("Carrito vacío.", 404);
   }
 
-  const item = await prisma.cartItem.findFirst({ where: { id: itemId, cartId: cart.id } });
+  const item = await prisma.cartItem.findFirst({
+    where: { id: itemId, cartId: cart.id },
+  });
   if (!item) {
     throw new AppError("Ese item no está en tu carrito.", 404);
   }
@@ -65,12 +91,16 @@ export async function updateItemQuantity(userId, itemId, quantity) {
 }
 
 export async function removeItem(userId, itemId) {
-  const cart = await prisma.cart.findFirst({ where: { userId, status: "ACTIVE" } });
+  const cart = await prisma.cart.findFirst({
+    where: { userId, status: "ACTIVE" },
+  });
   if (!cart) {
     throw new AppError("Carrito vacío.", 404);
   }
 
-  const item = await prisma.cartItem.findFirst({ where: { id: itemId, cartId: cart.id } });
+  const item = await prisma.cartItem.findFirst({
+    where: { id: itemId, cartId: cart.id },
+  });
   if (!item) {
     throw new AppError("Ese item no está en tu carrito.", 404);
   }
@@ -95,7 +125,9 @@ export async function checkout(userId) {
 
     for (const item of cart.items) {
       // Releemos el producto DENTRO de la transacción para evitar condiciones de carrera
-      const product = await tx.product.findUnique({ where: { id: item.productId } });
+      const product = await tx.product.findUnique({
+        where: { id: item.productId },
+      });
 
       if (!product) {
         throw new AppError(`El producto ${item.productId} ya no existe.`, 404);
@@ -109,11 +141,17 @@ export async function checkout(userId) {
         data: { stock: { decrement: item.quantity } },
       });
 
-      total += product.price * item.quantity;
+      // Precio EFECTIVO en el instante exacto del checkout: si hay oferta
+      // activa se paga el precio de oferta, si no el normal. Este valor
+      // queda fijado para siempre en priceAtPurchase, sin importar que el
+      // precio del producto cambie después (subidas, bajadas, fin de oferta).
+      const chargedPrice = effectivePrice(product);
+
+      total += chargedPrice * item.quantity;
       orderItemsData.push({
         productId: product.id,
         quantity: item.quantity,
-        priceAtPurchase: product.price,
+        priceAtPurchase: chargedPrice,
       });
     }
 
@@ -129,7 +167,10 @@ export async function checkout(userId) {
     // El carrito pasa a CHECKED_OUT (como pide el enunciado) en vez de vaciarse:
     // queda como registro histórico de lo que se compró, y la próxima vez que el
     // usuario añada algo se le creará un carrito ACTIVE nuevo automáticamente.
-    await tx.cart.update({ where: { id: cart.id }, data: { status: "CHECKED_OUT" } });
+    await tx.cart.update({
+      where: { id: cart.id },
+      data: { status: "CHECKED_OUT" },
+    });
 
     return newOrder;
   });

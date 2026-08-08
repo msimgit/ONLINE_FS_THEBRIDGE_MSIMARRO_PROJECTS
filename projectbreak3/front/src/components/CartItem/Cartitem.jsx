@@ -1,4 +1,5 @@
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { removeCartItem } from "../../store/cartSlice";
 
 // item = { id, productId, quantity, product: { name, price, imageUrl, ... } }
@@ -15,7 +16,9 @@ function CartItem({ item, compact = false }) {
 
   return (
     <article className="cart-item">
-      <img src={item.product.imageUrl} alt={item.product.name} />
+      <Link to={`/products/${item.productId}`} className="cart-item-image-link">
+        <img src={item.product.imageUrl} alt={item.product.name} />
+      </Link>
 
       <div className="cart-item-info">
         <h3>{item.product.name}</h3>
