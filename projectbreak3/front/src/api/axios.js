@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+// En desarrollo, sin VITE_API_URL definida, cae en localhost:3000.
+// En producción (Netlify), VITE_API_URL apunta al backend real en Render.
+const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL,
   withCredentials: true, // envía la cookie httpOnly en cada request
 });
 
