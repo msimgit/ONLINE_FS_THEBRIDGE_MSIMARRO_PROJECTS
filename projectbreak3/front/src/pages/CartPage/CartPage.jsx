@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCart } from "../../store/cartSlice";
 import CartItem from "../../components/CartItem/CartItem";
 import CartSummary from "../../components/CartSummary/CartSummary";
+import { fetchCart } from "../../store/cartSlice";
 
 function CartPage() {
   const dispatch = useDispatch();
@@ -12,8 +12,9 @@ function CartPage() {
     dispatch(fetchCart());
   }, [dispatch]);
 
-  if (loading && !cart)
+  if (loading && !cart) {
     return <p className="status-message">Cargando carrito...</p>;
+  }
   if (error) return <p className="status-message error">{error}</p>;
 
   const items = cart?.items ?? [];

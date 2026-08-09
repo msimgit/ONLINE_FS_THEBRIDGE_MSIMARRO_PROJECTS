@@ -74,17 +74,32 @@ function ProfilePage() {
                   <article key={item.id} className="cart-item">
                     <Link
                       to={`/products/${item.productId}`}
-                      className="cart-item-image-link"
+                      className="cart-item-image-link thumb-wrap"
                     >
                       <img
                         src={item.product.imageUrl}
                         alt={item.product.name}
                       />
+                      {item.originalPrice != null && (
+                        <span className="thumb-sale-stamp">Oferta</span>
+                      )}
                     </Link>
                     <div className="cart-item-info">
                       <h3>{item.product.name}</h3>
                       <p>
-                        {item.priceAtPurchase} € x {item.quantity}
+                        {item.originalPrice != null ? (
+                          <>
+                            <span className="product-card-price-old">
+                              {item.originalPrice} €
+                            </span>{" "}
+                            <span className="product-card-price-sale">
+                              {item.priceAtPurchase} €
+                            </span>
+                          </>
+                        ) : (
+                          <>{item.priceAtPurchase} €</>
+                        )}{" "}
+                        x {item.quantity}
                       </p>
                     </div>
                     <p className="cart-item-subtotal">

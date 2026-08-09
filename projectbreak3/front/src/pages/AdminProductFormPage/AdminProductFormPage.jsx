@@ -4,6 +4,7 @@ import {
   createProduct,
   updateProduct,
   getProductById,
+  uploadProductImage,
 } from "../../api/products";
 
 function AdminProductFormPage() {
@@ -16,11 +17,19 @@ function AdminProductFormPage() {
     price: "",
     stock: "",
     description: "",
-    imageUrl: "",
   });
   const [isOnSale, setIsOnSale] = useState(false);
   const [salePrice, setSalePrice] = useState("");
   const [isActive, setIsActive] = useState(true);
+
+  // Imagen: currentImageUrl es la que YA tiene el producto en BD (si estás
+  // editando); imageFile es el archivo nuevo elegido en este formulario,
+  // todavía sin subir. La vista previa usa el archivo nuevo si existe,
+  // si no la imagen actual.
+  const [currentImageUrl, setCurrentImageUrl] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
   const [loading, setLoading] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -36,14 +45,13 @@ function AdminProductFormPage() {
           price: product.price ?? "",
           stock: product.stock ?? "",
           description: product.description ?? "",
-          imageUrl: product.imageUrl ?? "",
         });
-        // salePrice puede venir como null (sin oferta) o número (con oferta)
         if (product.salePrice !== null && product.salePrice !== undefined) {
           setIsOnSale(true);
           setSalePrice(product.salePrice);
         }
         setIsActive(product.isActive ?? true);
+        setCurrentImageUrl(product.imageUrl ?? null);
       } catch (err) {
         setError("No se pudo cargar el producto.");
       } finally {
@@ -54,9 +62,26 @@ function AdminProductFormPage() {
     fetchProduct();
   }, [id, isEditing]);
 
+  // Libera el object URL de la vista previa al desmontar o cambiar de
+  // archivo, para no ir acumulando memoria en el navegador.
+  useEffect(() => {
+    if (!imageFile) {
+      setImagePreview(null);
+      return;
+    }
+    const url = URL.createObjectURL(imageFile);
+    setImagePreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [imageFile]);
+
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleFileChange(e) {
+    const file = e.target.files[0];
+    if (file) setImageFile(file);
   }
 
   function handleSaleToggle(e) {
@@ -88,6 +113,15 @@ function AdminProductFormPage() {
       }
     }
 
+    // En creación hace falta una imagen sí o sí; en edición basta con que
+    // ya hubiera una (no se obliga a cambiarla cada vez que editas texto).
+    if (!isEditing && !imageFile) {
+      return "Selecciona una imagen para el producto.";
+    }
+    if (isEditing && !imageFile && !currentImageUrl) {
+      return "Este producto no tiene imagen; sube una antes de guardar.";
+    }
+
     return null;
   }
 
@@ -102,7 +136,8 @@ function AdminProductFormPage() {
     }
 
     const payload = {
-      ...formData,
+      name: formData.name,
+      description: formData.description,
       price: Number(formData.price),
       stock: formData.stock === "" ? 0 : Number(formData.stock),
       // Se manda explícitamente null al desmarcar, para poder DESACTIVAR
@@ -113,11 +148,22 @@ function AdminProductFormPage() {
 
     try {
       setSubmitting(true);
+
       if (isEditing) {
         await updateProduct(id, payload);
+        // La imagen solo se sube si el admin eligió un archivo nuevo —
+        // si no tocó la imagen, la que ya había en BD se queda igual.
+        if (imageFile) {
+          await uploadProductImage(id, imageFile);
+        }
       } else {
-        await createProduct(payload);
+        // POST /products/:id/image exige un producto YA existente, así
+        // que primero se crea sin imagen y con el id que devuelve se sube
+        // el archivo en una segunda petición.
+        const created = await createProduct(payload);
+        await uploadProductImage(created.id, imageFile);
       }
+
       navigate("/admin/products");
     } catch (err) {
       setError(
@@ -130,6 +176,8 @@ function AdminProductFormPage() {
   }
 
   if (loading) return <p>Cargando producto...</p>;
+
+  const displayedImage = imagePreview || currentImageUrl;
 
   return (
     <div className="admin-form-page">
@@ -209,16 +257,22 @@ function AdminProductFormPage() {
         </div>
 
         <div className="admin-form-row">
-          <label htmlFor="imageUrl">URL de imagen</label>
-          {/* Temporal: hasta el tutorial de Cloudinary, la imagen se
-              introduce como URL manual (placeholder o enlace real). */}
-          <input
-            id="imageUrl"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            placeholder="URL de la imagen (temporal)"
-          />
+          <label htmlFor="image">Imagen</label>
+          <div className="admin-image-upload">
+            {displayedImage && (
+              <img
+                src={displayedImage}
+                alt="Vista previa"
+                className="admin-image-preview"
+              />
+            )}
+            <input
+              id="image"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </div>
         </div>
 
         <div className="admin-form-row admin-form-row-checkbox">
@@ -238,7 +292,13 @@ function AdminProductFormPage() {
             className="btn btn-primary"
             disabled={submitting}
           >
-            {submitting ? "Guardando..." : isEditing ? "Actualizar" : "Crear"}
+            {submitting
+              ? isEditing
+                ? "Guardando..."
+                : "Creando..."
+              : isEditing
+                ? "Actualizar"
+                : "Crear"}
           </button>
         </div>
       </form>

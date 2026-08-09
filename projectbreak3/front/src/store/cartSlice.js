@@ -2,14 +2,17 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   fetchCartRequest,
   addCartItemRequest,
+  updateCartItemRequest,
   removeCartItemRequest,
   getOrderBySessionRequest,
 } from "../api/cart";
 
-// Guardamos el objeto "cart" completo tal como lo devuelve el backend
-// (asumimos { items: [...], total } — ajustar si la forma real es distinta).
+// guestItems: carrito de un usuario SIN sesión. Vive solo en Redux (nunca
+// llega al backend, que exige auth en /cart) hasta que hace login — en ese
+// momento mergeGuestCart() lo traslada al carrito real del servidor.
 const initialState = {
   cart: null,
+  guestItems: [],
   order: null, // último pedido confirmado, útil para CheckoutSuccessPage
   loading: false,
   error: null,
@@ -41,6 +44,22 @@ export const addCartItem = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         extractError(error, "Error al añadir el producto"),
+      );
+    }
+  },
+);
+
+// itemId = id del CartItem (no del producto). Usado por los botones -/+
+// tanto en el drawer como en /cart, ya que ambos reutilizan CartItem.jsx.
+export const updateCartItem = createAsyncThunk(
+  "cart/updateCartItem",
+  async ({ itemId, quantity }, { rejectWithValue }) => {
+    try {
+      const { cart } = await updateCartItemRequest(itemId, quantity);
+      return cart;
+    } catch (error) {
+      return rejectWithValue(
+        extractError(error, "Error al actualizar la cantidad"),
       );
     }
   },
@@ -83,6 +102,33 @@ export const clearCart = createAsyncThunk(
   },
 );
 
+// Se dispara justo después de un login/registro con éxito (ver LoginPage).
+// Traslada cada línea del carrito local al carrito real del servidor,
+// vacía el carrito de invitado, y refresca el carrito ya fusionado.
+export const mergeGuestCart = createAsyncThunk(
+  "cart/mergeGuestCart",
+  async (_, { getState, dispatch, rejectWithValue }) => {
+    try {
+      const { guestItems } = getState().cart;
+
+      for (const item of guestItems) {
+        await addCartItemRequest({
+          productId: item.productId,
+          quantity: item.quantity,
+        });
+      }
+
+      dispatch(clearGuestCart());
+      const { cart } = await fetchCartRequest();
+      return cart;
+    } catch (error) {
+      return rejectWithValue(
+        extractError(error, "Error al fusionar el carrito"),
+      );
+    }
+  },
+);
+
 // El pedido lo crea el webhook de Stripe, no este thunk. Aquí solo se
 // CONSULTA por sessionId, con un par de reintentos cortos por si el
 // webhook aún no ha llegado cuando el navegador ya redirigió a
@@ -115,7 +161,39 @@ export const confirmOrderBySession = createAsyncThunk(
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    // Carrito de invitado: todo síncrono, sin tocar el backend.
+    addGuestItem: (state, action) => {
+      const { product, quantity } = action.payload;
+      const existing = state.guestItems.find(
+        (item) => item.productId === product.id,
+      );
+
+      if (existing) {
+        existing.quantity += quantity;
+      } else {
+        state.guestItems.push({
+          id: `guest-${product.id}`,
+          productId: product.id,
+          quantity,
+          product,
+        });
+      }
+    },
+    updateGuestItemQuantity: (state, action) => {
+      const { itemId, quantity } = action.payload;
+      const item = state.guestItems.find((i) => i.id === itemId);
+      if (item) item.quantity = quantity;
+    },
+    removeGuestItem: (state, action) => {
+      state.guestItems = state.guestItems.filter(
+        (item) => item.id !== action.payload,
+      );
+    },
+    clearGuestCart: (state) => {
+      state.guestItems = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       // fetchCart
@@ -141,6 +219,19 @@ const cartSlice = createSlice({
         state.cart = action.payload;
       })
       .addCase(addCartItem.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // updateCartItem
+      .addCase(updateCartItem.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCartItem.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cart = action.payload;
+      })
+      .addCase(updateCartItem.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
@@ -170,6 +261,19 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      // mergeGuestCart
+      .addCase(mergeGuestCart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(mergeGuestCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cart = action.payload;
+      })
+      .addCase(mergeGuestCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       // confirmOrderBySession
       .addCase(confirmOrderBySession.pending, (state) => {
         state.loading = true;
@@ -186,5 +290,12 @@ const cartSlice = createSlice({
       });
   },
 });
+
+export const {
+  addGuestItem,
+  updateGuestItemQuantity,
+  removeGuestItem,
+  clearGuestCart,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

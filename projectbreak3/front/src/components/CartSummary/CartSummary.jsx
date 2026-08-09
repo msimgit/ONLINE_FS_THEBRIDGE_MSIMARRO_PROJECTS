@@ -7,9 +7,8 @@ function CartSummary({ items }) {
   const [error, setError] = useState(null);
 
   // Precio EFECTIVO: si el producto tiene oferta activa, se cobra ese;
-  // si no, el normal. Debe coincidir con lo que usa CartItem.jsx para
-  // cada línea individual (si no, el total no cuadraría con la suma
-  // de subtotales que ve el usuario).
+  // si no, el normal. Debe coincidir exactamente con lo que usa
+  // CartItem.jsx para cada línea individual.
   const total = items.reduce(
     (acc, item) =>
       acc + item.quantity * (item.product.salePrice ?? item.product.price),

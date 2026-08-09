@@ -43,14 +43,32 @@ app.use(
 // 429, y Render reiniciaría el servicio pensando que está caído.
 app.get("/health", (req, res) => ok(res, { status: "up" }));
 
-// Rate limit general (protege login/registro de fuerza bruta entre otros)
-const limiter = rateLimit({
+// Rate limit del resto de la API: navegación normal (catálogo, carrito,
+// perfil...) genera muchas peticiones por sesión real de usuario —
+// un límite pensado para frenar fuerza bruta en login sería demasiado
+// agresivo aplicado aquí también.
+const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100,
+  max: 300,
   standardHeaders: true,
   legacyHeaders: false,
 });
-app.use(limiter);
+app.use(generalLimiter);
+
+// Rate limit estricto SOLO para login/registro: aquí sí tiene sentido
+// limitar mucho más, es la superficie real de ataque por fuerza bruta.
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    error: "Demasiados intentos. Inténtalo de nuevo en unos minutos.",
+  },
+});
+app.use("/api/auth/login", authLimiter);
+app.use("/api/auth/register", authLimiter);
 
 // --- Webhook de Stripe (ANTES de express.json(), body en crudo) ---
 app.post(

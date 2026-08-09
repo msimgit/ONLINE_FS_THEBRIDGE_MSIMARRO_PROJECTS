@@ -67,9 +67,12 @@ function CheckoutSuccessPage() {
             <article key={item.id} className="cart-item">
               <Link
                 to={`/products/${item.productId}`}
-                className="cart-item-image-link"
+                className="cart-item-image-link thumb-wrap"
               >
                 <img src={item.product.imageUrl} alt={item.product.name} />
+                {item.originalPrice != null && (
+                  <span className="thumb-sale-stamp">Oferta</span>
+                )}
               </Link>
 
               <div className="cart-item-info">

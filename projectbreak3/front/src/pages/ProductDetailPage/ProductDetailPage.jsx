@@ -5,6 +5,7 @@ import { useProduct } from "../../hooks/useProduct";
 import { useReviews } from "../../hooks/useReviews";
 import { addCartItem } from "../../store/cartSlice";
 import { fetchWishlist, toggleWishlist } from "../../store/wishlistSlice";
+import { selectIsAdmin } from "../../store/authSlice";
 import ReviewForm from "../../components/ReviewForm/ReviewForm";
 import StarRating from "../../components/StarRating/StarRating";
 import { formatDate } from "../../utils/formatDate";
@@ -29,6 +30,7 @@ function ProductDetailPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isAdmin = useSelector(selectIsAdmin);
   const { productIds: wishlistIds } = useSelector((state) => state.wishlist);
 
   // Antes de los return condicionales (loading/error): las reglas de Hooks
@@ -74,6 +76,7 @@ function ProductDetailPage() {
 
   // Aquí ya es seguro usar `product`: pasamos los guards de loading/error
   const isInWishlist = wishlistIds.includes(product.id);
+  const isOnSale = product.salePrice != null;
 
   return (
     <section className="product-detail">
@@ -83,8 +86,9 @@ function ProductDetailPage() {
 
       <div className="product-detail-card">
         <div className="product-detail-media">
-          <div className="product-detail-image-wrap">
+          <div className="product-detail-image-wrap thumb-wrap">
             <img src={product.imageUrl} alt={product.name} />
+            {isOnSale && <span className="thumb-sale-stamp">Oferta</span>}
             <button
               className="product-detail-zoom-btn"
               onClick={() => setIsZoomOpen(true)}
@@ -95,8 +99,9 @@ function ProductDetailPage() {
           </div>
 
           <button
-            className="btn btn-secondary product-detail-wishlist-btn"
+            className={`btn btn-secondary product-detail-wishlist-btn${isAdmin ? " disabled" : ""}`}
             onClick={handleToggleWishlist}
+            disabled={isAdmin}
           >
             {isInWishlist ? "Quitar de la wishlist" : "Añadir a la wishlist"}
           </button>
@@ -109,7 +114,16 @@ function ProductDetailPage() {
           </div>
 
           <div className="product-detail-meta">
-            <p className="product-price">{product.price} €</p>
+            {isOnSale ? (
+              <p className="product-price">
+                <span className="product-price-old">{product.price} €</span>{" "}
+                <span className="product-price-sale">
+                  {product.salePrice} €
+                </span>
+              </p>
+            ) : (
+              <p className="product-price">{product.price} €</p>
+            )}
             <p className="product-stock">Stock: {product.stock}</p>
 
             <div className="quantity-selector">
@@ -126,7 +140,11 @@ function ProductDetailPage() {
               </button>
             </div>
 
-            <button className="btn btn-primary" onClick={handleAddToCart}>
+            <button
+              className={`btn btn-primary${isAdmin ? " disabled" : ""}`}
+              onClick={handleAddToCart}
+              disabled={isAdmin}
+            >
               {added ? "Añadido" : `Añadir ${quantity} al carrito`}
             </button>
           </div>

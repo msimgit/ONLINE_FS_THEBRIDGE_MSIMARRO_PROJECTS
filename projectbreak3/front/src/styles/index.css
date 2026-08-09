@@ -149,6 +149,18 @@ a {
   color: #fff;
 }
 
+/* Estado deshabilitado (ej. acciones de compra ocultas al admin):
+   gris, sin cursor de mano, sin hover — pointer-events:none bloquea
+   tanto el click como cualquier :hover que pudiera aplicar. */
+.btn:disabled,
+.btn.disabled,
+.header-icon-button:disabled,
+.header-icon-button.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* Tipo 2: link/pill de navegación (header, sidebar admin, drawer) */
 .header-nav a.header-pill-link,
 .header-pill-link {
@@ -313,6 +325,76 @@ a {
 
 .search-input::placeholder {
   color: var(--color-text-muted);
+}
+
+/* ============ CATÁLOGO: buscador + ordenación ============ */
+.products-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* El toolbar ya gestiona el espacio hacia la grid de abajo */
+.products-toolbar .search-input {
+  margin-bottom: 0;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sort-label {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-right: 0.2rem;
+}
+
+.sort-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.sort-pill:hover {
+  color: var(--color-text);
+  background: var(--glass-bg-hover);
+}
+
+.sort-pill.active {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+  background: var(--glass-bg-hover);
+}
+
+.sort-pill-arrow {
+  color: var(--color-accent);
+  font-size: 0.65rem;
+}
+
+@media (max-width: 640px) {
+  .products-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sort-controls {
+    justify-content: flex-start;
+  }
 }
 
 /* ============ HOME HERO ============ */
@@ -735,6 +817,26 @@ a {
 .cart-item-info p {
   color: var(--color-text-muted);
   font-size: 0.9rem;
+}
+
+/* Selector de cantidad dentro de la fila del cart-item: mismo componente
+   visual que en ProductDetailPage, pero más compacto para caber junto al
+   nombre/precio en una fila horizontal (drawer y /cart por igual). */
+.cart-item-quantity {
+  margin-top: 0.4rem;
+  padding: 0.2rem 0.4rem;
+  gap: 0.6rem;
+}
+
+.cart-item-quantity button {
+  width: 26px;
+  height: 26px;
+  font-size: 1rem;
+}
+
+.cart-item-quantity button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .cart-item-subtotal {
@@ -1491,6 +1593,26 @@ a {
   margin-top: 0.5rem;
 }
 
+.admin-image-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.admin-image-preview {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--glass-border);
+}
+
+.admin-image-upload input[type="file"] {
+  width: auto;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
 .admin-sale-field {
   display: flex;
   align-items: center;
@@ -1521,21 +1643,29 @@ a {
   }
 }
 
-/* ============ PRECIO DE OFERTA (ribbon + tachado) ============ */
-.product-card-sale-ribbon {
+/* ============ PRECIO DE OFERTA (cinta diagonal, esquina inf. derecha) ============ */
+.thumb-wrap {
+  position: relative;
+  overflow: hidden; /* recorta la cinta a los límites exactos de la imagen */
+}
+
+.thumb-sale-stamp {
   position: absolute;
-  top: 0.8rem;
-  left: -0.4rem;
-  z-index: 5;
-  padding: 0.3rem 0.9rem;
+  bottom: 18px;
+  right: -38px;
+  width: 130px;
+  padding: 0.3rem 0;
   background: var(--color-accent);
   color: #fff;
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  border-radius: 0 999px 999px 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  letter-spacing: 0.06em;
+  text-align: center;
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  z-index: 3;
+  pointer-events: none; /* elemento aparte de <img>: el zoom del hover no la mueve */
 }
 
 .product-card-price-old,

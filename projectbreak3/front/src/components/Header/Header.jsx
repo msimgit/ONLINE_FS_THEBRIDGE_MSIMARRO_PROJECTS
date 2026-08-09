@@ -64,7 +64,7 @@ function Header({
   return (
     <header className="header">
       <NavLink to="/" className="header-logo" onClick={closeMenu}>
-        WorldCup Shop
+        Developing my eCommerce
       </NavLink>
 
       <button
@@ -108,9 +108,17 @@ function Header({
           </button>
         )}
 
-        {/* Un admin gestiona la tienda, no compra en ella: sin acceso
-            al carrito mientras esté logueado con ese rol. */}
-        {!isAdmin && (
+        {/* Un admin gestiona la tienda, no compra en ella: el icono se
+            queda visible (coherencia visual) pero deshabilitado. */}
+        {isAdmin ? (
+          <button
+            className="header-icon-button disabled"
+            disabled
+            aria-label="Carrito no disponible para administradores"
+          >
+            <CartIcon />
+          </button>
+        ) : (
           <button
             className={`header-icon-button ${isCartOpen ? "active" : ""}`}
             onClick={onCartClick}
