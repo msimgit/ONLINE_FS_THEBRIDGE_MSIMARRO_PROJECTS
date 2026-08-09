@@ -28,9 +28,7 @@ function withCartTotal(cart) {
 // checkout que hace), pero solo UNO en estado ACTIVE a la vez. Es ese el que
 // usan todas las operaciones de "añadir/editar/quitar" mientras compra.
 async function getOrCreateActiveCartId(userId) {
-  const existing = await prisma.cart.findFirst({
-    where: { userId, status: "ACTIVE" },
-  });
+  const existing = await prisma.cart.findFirst({ where: { userId, status: "ACTIVE" } });
   if (existing) return existing.id;
 
   const created = await prisma.cart.create({ data: { userId } });
@@ -39,10 +37,7 @@ async function getOrCreateActiveCartId(userId) {
 
 export async function getCart(userId) {
   const cartId = await getOrCreateActiveCartId(userId);
-  const cart = await prisma.cart.findUnique({
-    where: { id: cartId },
-    include: cartInclude,
-  });
+  const cart = await prisma.cart.findUnique({ where: { id: cartId }, include: cartInclude });
   return withCartTotal(cart);
 }
 
@@ -71,16 +66,12 @@ export async function addItem(userId, productId, quantity) {
 // itemId es el id del propio CartItem (tal y como pide el enunciado:
 // DELETE /api/cart/items/:itemId), no el id del producto.
 export async function updateItemQuantity(userId, itemId, quantity) {
-  const cart = await prisma.cart.findFirst({
-    where: { userId, status: "ACTIVE" },
-  });
+  const cart = await prisma.cart.findFirst({ where: { userId, status: "ACTIVE" } });
   if (!cart) {
     throw new AppError("Carrito vacío.", 404);
   }
 
-  const item = await prisma.cartItem.findFirst({
-    where: { id: itemId, cartId: cart.id },
-  });
+  const item = await prisma.cartItem.findFirst({ where: { id: itemId, cartId: cart.id } });
   if (!item) {
     throw new AppError("Ese item no está en tu carrito.", 404);
   }
@@ -91,16 +82,12 @@ export async function updateItemQuantity(userId, itemId, quantity) {
 }
 
 export async function removeItem(userId, itemId) {
-  const cart = await prisma.cart.findFirst({
-    where: { userId, status: "ACTIVE" },
-  });
+  const cart = await prisma.cart.findFirst({ where: { userId, status: "ACTIVE" } });
   if (!cart) {
     throw new AppError("Carrito vacío.", 404);
   }
 
-  const item = await prisma.cartItem.findFirst({
-    where: { id: itemId, cartId: cart.id },
-  });
+  const item = await prisma.cartItem.findFirst({ where: { id: itemId, cartId: cart.id } });
   if (!item) {
     throw new AppError("Ese item no está en tu carrito.", 404);
   }
@@ -110,7 +97,19 @@ export async function removeItem(userId, itemId) {
   return getCart(userId);
 }
 
-export async function checkout(userId) {
+// stripeSessionId: viene del webhook de Stripe. Si ya existe un Order con
+// ese sessionId, este checkout ya se procesó antes (reintento de Stripe) —
+// se devuelve el pedido existente en vez de crear uno duplicado y volver
+// a descontar stock.
+export async function checkout(userId, stripeSessionId = null) {
+  if (stripeSessionId) {
+    const existing = await prisma.order.findUnique({
+      where: { stripeSessionId },
+      include: { items: { include: { product: true } } },
+    });
+    if (existing) return existing;
+  }
+
   const cart = await getCart(userId);
 
   if (!cart.items || cart.items.length === 0) {
@@ -125,9 +124,7 @@ export async function checkout(userId) {
 
     for (const item of cart.items) {
       // Releemos el producto DENTRO de la transacción para evitar condiciones de carrera
-      const product = await tx.product.findUnique({
-        where: { id: item.productId },
-      });
+      const product = await tx.product.findUnique({ where: { id: item.productId } });
 
       if (!product) {
         throw new AppError(`El producto ${item.productId} ya no existe.`, 404);
@@ -146,12 +143,16 @@ export async function checkout(userId) {
       // queda fijado para siempre en priceAtPurchase, sin importar que el
       // precio del producto cambie después (subidas, bajadas, fin de oferta).
       const chargedPrice = effectivePrice(product);
+      const wasOnSale = product.salePrice != null;
 
       total += chargedPrice * item.quantity;
       orderItemsData.push({
         productId: product.id,
         quantity: item.quantity,
         priceAtPurchase: chargedPrice,
+        // Solo se rellena si había oferta activa; así un pedido comprado
+        // a precio normal no arrastra un originalPrice redundante.
+        originalPrice: wasOnSale ? product.price : null,
       });
     }
 
@@ -159,6 +160,7 @@ export async function checkout(userId) {
       data: {
         userId,
         total,
+        stripeSessionId,
         items: { create: orderItemsData },
       },
       include: { items: { include: { product: true } } },
@@ -167,13 +169,27 @@ export async function checkout(userId) {
     // El carrito pasa a CHECKED_OUT (como pide el enunciado) en vez de vaciarse:
     // queda como registro histórico de lo que se compró, y la próxima vez que el
     // usuario añada algo se le creará un carrito ACTIVE nuevo automáticamente.
-    await tx.cart.update({
-      where: { id: cart.id },
-      data: { status: "CHECKED_OUT" },
-    });
+    await tx.cart.update({ where: { id: cart.id }, data: { status: "CHECKED_OUT" } });
 
     return newOrder;
   });
+
+  return order;
+}
+
+export async function getOrderBySessionId(userId, sessionId) {
+  const order = await prisma.order.findUnique({
+    where: { stripeSessionId: sessionId },
+    include: { items: { include: { product: true } } },
+  });
+
+  if (!order) return null;
+
+  // No dejamos que un usuario consulte el pedido de otro adivinando/probando
+  // session ids ajenos, aunque en la práctica son strings no adivinables.
+  if (order.userId !== userId) {
+    throw new AppError("No tienes permiso para ver este pedido.", 403);
+  }
 
   return order;
 }
