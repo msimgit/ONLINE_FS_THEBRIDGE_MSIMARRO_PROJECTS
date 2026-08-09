@@ -46,7 +46,10 @@ export async function createCheckoutSession(req, res, next) {
       payment_method_types: ["card"],
       mode: "payment",
       line_items: lineItems,
-      success_url: `${env.clientUrl}/checkout/success`,
+      // {CHECKOUT_SESSION_ID} es un placeholder literal que Stripe sustituye
+      // por el id real de la sesión al redirigir. Sin esto, CheckoutSuccessPage
+      // no tiene forma de saber qué pedido consultar (llega sin ?session_id=...).
+      success_url: `${env.clientUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${env.clientUrl}/cart`,
       metadata: { userId: req.user.sub }, // útil para asociar el pedido luego
     });
