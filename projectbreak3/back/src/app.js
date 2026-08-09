@@ -1,5 +1,9 @@
 // Estructura base (Express, parsers, /health): Sprint 7.
 // Seguridad (helmet, cors, rate limit): Sprint 10.
+// Webhook de Stripe: registrado ANTES de express.json() y con su propio
+// parser en crudo — la verificación de firma de Stripe necesita el body
+// tal cual llegó por la red, byte a byte; si express.json() lo parsea
+// primero, la firma nunca verifica y el webhook falla siempre.
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -12,6 +16,7 @@ import { swaggerSpec } from "./config/swaggerSpec.js";
 import { ok } from "./utils/response.js";
 import { notFound } from "./middlewares/notFound.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { handleStripeWebhook } from "./controllers/webhook.controller.js";
 import routes from "./routes/index.routes.js";
 
 const app = express();
@@ -31,6 +36,13 @@ app.use(
   }),
 );
 
+// --- Health check ---
+// Registrado ANTES del rate limiter: Render hace ping aquí periódicamente
+// para saber si el servicio sigue vivo. Si contara contra el límite de
+// peticiones, los propios health checks podrían acabar bloqueados con un
+// 429, y Render reiniciaría el servicio pensando que está caído.
+app.get("/health", (req, res) => ok(res, { status: "up" }));
+
 // Rate limit general (protege login/registro de fuerza bruta entre otros)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
@@ -40,12 +52,16 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// --- Webhook de Stripe (ANTES de express.json(), body en crudo) ---
+app.post(
+  "/api/webhook/stripe",
+  express.raw({ type: "application/json" }),
+  handleStripeWebhook,
+);
+
 // --- Parsers ---
 app.use(express.json());
 app.use(cookieParser());
-
-// --- Health check ---
-app.get("/health", (req, res) => ok(res, { status: "up" }));
 
 // --- Documentación Swagger ---
 // swagger-ui-express sirve todo su JS/CSS desde el propio origen (sin scripts
