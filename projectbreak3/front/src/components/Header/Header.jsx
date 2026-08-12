@@ -1,3 +1,4 @@
+// Sprint 13 - Props (onCartClick, cartItemCount...) y NavLink de React Router para el estado 'activo' del enlace.
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";

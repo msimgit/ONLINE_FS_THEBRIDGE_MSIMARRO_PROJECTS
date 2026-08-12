@@ -1,3 +1,4 @@
+// Sprint 14 - Cliente HTTP (axios) centralizado: base de toda la asincronía de la app (peticiones + interceptores).
 import axios from 'axios';
 
 // En desarrollo, sin VITE_API_URL definida, cae en localhost:3000.

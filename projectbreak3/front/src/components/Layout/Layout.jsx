@@ -1,3 +1,4 @@
+// Sprint 13 - Composición por props/children: <Outlet /> como "children" del layout común (Header+Footer envolviendo cada página).
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";

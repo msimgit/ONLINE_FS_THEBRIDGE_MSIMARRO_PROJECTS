@@ -1,3 +1,4 @@
+// Sprint 14 - Hook personalizado: useEffect + useCallback, gestión de asincronía fuera de Redux.
 import { useState, useEffect, useCallback } from "react";
 import { getOrdersRequest, requestReturnRequest } from "../api/orders";
 

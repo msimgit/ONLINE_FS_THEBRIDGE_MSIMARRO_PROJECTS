@@ -1,3 +1,4 @@
+// Sprint 15 - Componente de presentación que recibe el total ya calculado; el checkout real se dispara vía Stripe (Sprint 16, fuera de Redux).
 import { useState } from "react";
 import { createCheckoutSession } from "../../api/checkout";
 

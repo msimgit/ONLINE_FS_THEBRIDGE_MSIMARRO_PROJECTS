@@ -1,3 +1,4 @@
+// Sprint 13 - Página de ruta índice ('/'), composición de componentes por props.
 import { Link } from "react-router-dom";
 import { useProducts } from "../../hooks/useProducts";
 import ProductGrid from "../../components/ProductGrid/ProductGrid";

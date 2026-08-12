@@ -1,3 +1,4 @@
+// Sprint 13 - Ruta '/products' + Sprint 14 (fetch de productos vía hook con useEffect).
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../store/productsSlice";

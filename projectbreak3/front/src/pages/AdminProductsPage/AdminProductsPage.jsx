@@ -1,3 +1,4 @@
+// Sprint 16 - useMemo para memoizar el ordenado de la tabla (evita re-ordenar en cada render si no cambian products/sortConfig).
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {

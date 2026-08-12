@@ -1,3 +1,4 @@
+// Sprint 13 - Ruta comodín (path: '*') de React Router para URLs no definidas.
 import { Link } from "react-router-dom";
 
 function NotFoundPage() {

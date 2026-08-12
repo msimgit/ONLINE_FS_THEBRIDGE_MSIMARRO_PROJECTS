@@ -1,3 +1,4 @@
+// Sprint 15 - useSelector/useDispatch: lee el usuario autenticado del store y dispatch-ea el logout.
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { logout, selectIsAdmin } from "../../store/authSlice";

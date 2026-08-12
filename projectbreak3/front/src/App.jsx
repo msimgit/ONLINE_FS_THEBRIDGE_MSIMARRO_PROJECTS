@@ -1,3 +1,4 @@
+// Sprint 13 - Componente plantilla de Vite, sin uso real en esta app (el árbol de rutas vive en router/index.jsx).
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'

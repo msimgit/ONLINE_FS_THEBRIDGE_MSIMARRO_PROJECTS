@@ -1,3 +1,4 @@
+// Sprint 14 - Hook personalizado: useEffect + useCallback para poder exponer un 'refetch' tras un POST.
 import { useState, useEffect, useCallback } from 'react';
 import { getReviews } from '../api/reviews';
 

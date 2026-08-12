@@ -1,3 +1,4 @@
+// Sprint 13 - Ruta dinámica '/products/:id' (useParams) + Sprint 14 (useEffect/fetch) + Sprint 15 (Redux: carrito, wishlist, rol admin).
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";

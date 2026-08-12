@@ -1,3 +1,4 @@
+// Sprint 14 - Funciones async/await que envuelven las llamadas HTTP de productos.
 import api from './axios';
 
 export const getProducts = async () => {

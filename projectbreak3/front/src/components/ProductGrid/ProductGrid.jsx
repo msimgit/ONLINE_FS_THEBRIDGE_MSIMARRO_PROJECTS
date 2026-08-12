@@ -1,3 +1,4 @@
+// Sprint 13 - Renderizado de listas con .map() y prop 'key', composición de <ProductCard> por props.
 import ProductCard from '../ProductCard/ProductCard';
 
 // Recibe la lista por props y la transforma en tarjetas

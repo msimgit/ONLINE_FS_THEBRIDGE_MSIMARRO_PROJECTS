@@ -1,3 +1,4 @@
+// Sprint 15 - Redux Toolkit: createSlice + createAsyncThunk (login/register/logout/checkAuth) y selectores derivados.
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   loginRequest,

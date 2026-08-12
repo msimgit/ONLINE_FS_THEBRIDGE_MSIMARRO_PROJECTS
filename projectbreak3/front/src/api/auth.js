@@ -1,3 +1,4 @@
+// Sprint 14 - Funciones async/await que envuelven las llamadas HTTP de autenticación.
 import api from './axios';
 
 export const loginRequest = async (credentials) => {

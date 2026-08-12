@@ -1,3 +1,4 @@
+// Sprint 15 - useSelector/useDispatch para leer y refrescar el carrito desde el store global.
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CartItem from "../../components/CartItem/CartItem";

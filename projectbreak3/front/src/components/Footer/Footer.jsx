@@ -1,3 +1,4 @@
+// Sprint 13 - Componente de presentación puro, sin props ni estado.
 function Footer() {
   const currentYear = new Date().getFullYear();
 

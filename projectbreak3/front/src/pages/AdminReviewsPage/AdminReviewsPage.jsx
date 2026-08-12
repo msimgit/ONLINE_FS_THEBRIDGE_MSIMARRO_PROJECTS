@@ -1,3 +1,4 @@
+// Sprint 16 - useMemo para memoizar el ordenado de la grid de valoraciones medias por producto.
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { getNegativeReviewsRequest, resolveReviewRequest } from "../../api/adminReviews";

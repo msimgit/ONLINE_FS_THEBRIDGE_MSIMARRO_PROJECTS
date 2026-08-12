@@ -1,3 +1,4 @@
+// Sprint 13 - React + Router: raíz de la app, <RouterProvider> monta el árbol de rutas.
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';

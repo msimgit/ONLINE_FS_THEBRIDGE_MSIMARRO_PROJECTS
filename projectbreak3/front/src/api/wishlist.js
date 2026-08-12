@@ -1,3 +1,4 @@
+// Sprint 14 - Funciones async/await que envuelven las llamadas HTTP de la wishlist.
 import api from './axios';
 
 // Respuestas envueltas en { success, data: { wishlist } }

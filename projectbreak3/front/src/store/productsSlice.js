@@ -1,3 +1,4 @@
+// Sprint 15 - Redux Toolkit: createSlice con 'condition' en createAsyncThunk para cachear peticiones ya resueltas.
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getProducts } from "../api/products";
 

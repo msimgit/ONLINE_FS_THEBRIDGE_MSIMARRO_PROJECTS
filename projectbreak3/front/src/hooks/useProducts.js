@@ -1,3 +1,4 @@
+// Sprint 14 - Hook personalizado: fetch asíncrono de listado con useEffect + estados loading/error.
 import { useState, useEffect } from 'react';
 import { getProducts } from '../api/products';
 

@@ -1,3 +1,4 @@
+// Sprint 15 - useSelector/useDispatch para leer y modificar la wishlist desde el store global.
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWishlist } from "../../store/wishlistSlice";

@@ -1,3 +1,4 @@
+// Sprint 14 - Hook personalizado: useEffect para recalcular datos derivados de forma asíncrona.
 import { useState, useEffect } from "react";
 import { getReviews } from "../api/reviews";
 

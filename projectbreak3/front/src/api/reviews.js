@@ -1,3 +1,4 @@
+// Sprint 14 - Funciones async/await que envuelven las llamadas HTTP de reviews.
 import api from "./axios";
 
 // El backend envuelve todo en { success, data } (ver utils/response.js -> ok())

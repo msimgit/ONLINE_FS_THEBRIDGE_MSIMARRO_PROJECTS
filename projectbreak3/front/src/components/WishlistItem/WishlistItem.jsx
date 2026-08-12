@@ -1,3 +1,4 @@
+// Sprint 13 - Props (item) para renderizar cada fila de la wishlist.
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toggleWishlist } from "../../store/wishlistSlice";

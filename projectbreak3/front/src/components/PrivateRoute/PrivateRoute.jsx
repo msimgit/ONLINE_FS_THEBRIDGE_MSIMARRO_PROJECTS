@@ -1,3 +1,4 @@
+// Sprint 13 - Rutas protegidas con React Router (<Outlet/> + <Navigate/> condicional).
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 

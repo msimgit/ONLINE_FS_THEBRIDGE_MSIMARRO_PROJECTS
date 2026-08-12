@@ -1,3 +1,4 @@
+// Sprint 14 - Funciones async/await que envuelven las llamadas HTTP del carrito.
 import api from './axios';
 
 // Todas las respuestas van envueltas en { success, data } (ver utils/response.js)

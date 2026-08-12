@@ -1,3 +1,4 @@
+// Sprint 15 - Redux Toolkit: createSlice + createAsyncThunk para todas las operaciones del carrito y checkout.
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   fetchCartRequest,

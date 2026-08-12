@@ -1,3 +1,4 @@
+// Sprint 13 - Props (item, compact) + Sprint 15 (dispatch de thunks del carrito).
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";

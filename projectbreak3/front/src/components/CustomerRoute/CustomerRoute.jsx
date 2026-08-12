@@ -1,3 +1,4 @@
+// Sprint 13 - Rutas protegidas: excluye al rol ADMIN de rutas de cliente (checkout).
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { selectIsAdmin } from "../../store/authSlice";

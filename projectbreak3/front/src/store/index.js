@@ -1,3 +1,4 @@
+// Sprint 15 - Configuración del store de Redux Toolkit (combineReducers implícito vía configureStore).
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
 import cartReducer from './cartSlice';

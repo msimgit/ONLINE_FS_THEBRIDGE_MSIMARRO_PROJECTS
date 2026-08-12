@@ -1,3 +1,4 @@
+// Sprint 16 - Estado local complejo (selección por artículo) resuelto con varios useState coordinados.
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { formatDate } from "../../utils/formatDate";

@@ -1,3 +1,4 @@
+// Sprint 14 - useRef como guarda anti doble-fetch (evita el doble dispatch de React 18 StrictMode) + useEffect asíncrono.
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";

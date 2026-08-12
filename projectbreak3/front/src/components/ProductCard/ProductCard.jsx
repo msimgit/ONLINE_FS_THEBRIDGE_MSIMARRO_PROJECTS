@@ -1,3 +1,4 @@
+// Sprint 13 - Props (product) + Sprint 15 (useSelector/useDispatch para carrito y rol admin).
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addCartItem } from "../../store/cartSlice";

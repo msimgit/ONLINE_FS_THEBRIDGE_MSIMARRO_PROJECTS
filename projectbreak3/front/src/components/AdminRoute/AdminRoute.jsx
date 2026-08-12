@@ -1,3 +1,4 @@
+// Sprint 13 - Rutas protegidas por rol con React Router (<Outlet/> + <Navigate/> condicional).
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { selectIsAdmin } from "../../store/authSlice";

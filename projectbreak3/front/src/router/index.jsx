@@ -1,3 +1,4 @@
+// Sprint 13 - React Router: definición de rutas, rutas anidadas (children) y rutas dinámicas (:id).
 import { createBrowserRouter } from "react-router-dom";
 
 import AdminDashboardPage from "../pages/AdminDashboardPage/AdminDashboardPage";

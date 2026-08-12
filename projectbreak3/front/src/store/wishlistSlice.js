@@ -1,3 +1,4 @@
+// Sprint 15 - Redux Toolkit: createSlice + createAsyncThunk para la wishlist del usuario.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   fetchWishlistRequest,

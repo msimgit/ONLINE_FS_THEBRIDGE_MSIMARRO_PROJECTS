@@ -1,3 +1,4 @@
+// Sprint 15 - useSelector/useDispatch: lee el carrito del store global y dispatch-ea acciones sobre él.
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";

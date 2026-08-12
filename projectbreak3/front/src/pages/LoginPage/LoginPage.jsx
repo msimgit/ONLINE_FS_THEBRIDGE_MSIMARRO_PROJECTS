@@ -1,3 +1,4 @@
+// Sprint 13 - Formulario controlado con componentes propios (FormInput) + Sprint 15 (dispatch del thunk login).
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
