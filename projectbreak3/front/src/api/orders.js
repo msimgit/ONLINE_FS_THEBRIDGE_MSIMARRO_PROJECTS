@@ -5,7 +5,8 @@ export const getOrdersRequest = async () => {
   return response.data.data.orders;
 };
 
-export const returnOrderRequest = async (orderId) => {
-  const response = await api.post(`/orders/${orderId}/return`);
-  return response.data.data.order;
+// items = [{ orderItemId, quantity, reason }]
+export const requestReturnRequest = async (orderId, items) => {
+  const response = await api.post(`/orders/${orderId}/return`, { items });
+  return response.data.data.request;
 };

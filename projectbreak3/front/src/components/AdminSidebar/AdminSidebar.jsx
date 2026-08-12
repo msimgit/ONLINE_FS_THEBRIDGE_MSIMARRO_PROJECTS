@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
-// Árbol de navegación del admin. Añadir aquí nuevas categorías (pedidos,
-// usuarios...) sin tocar el resto del componente.
 const ADMIN_NAV = [
   {
     key: "products",
@@ -13,19 +11,26 @@ const ADMIN_NAV = [
       { to: "/admin/products/new", label: "Crear producto" },
     ],
   },
+  {
+    key: "issues",
+    label: "Incidencias",
+    basePath: "/admin/returns", // también cubre /admin/reviews más abajo
+    items: [
+      { to: "/admin/returns", label: "Devoluciones" },
+      { to: "/admin/reviews", label: "Comentarios" },
+    ],
+  },
 ];
 
 function AdminSidebar() {
   const location = useLocation();
 
-  // Si entras directamente en una subpágina (ej. recargando /admin/products
-  // o volviendo de editar), la categoría correspondiente ya arranca abierta
-  // en vez de obligarte a desplegarla a mano.
-  const [openKey, setOpenKey] = useState(
-    () =>
-      ADMIN_NAV.find((category) =>
-        location.pathname.startsWith(category.basePath),
-      )?.key ?? null,
+  const [openKey, setOpenKey] = useState(() =>
+    ADMIN_NAV.find(
+      (category) =>
+        location.pathname.startsWith(category.basePath) ||
+        location.pathname.startsWith("/admin/reviews"),
+    )?.key ?? null,
   );
 
   function toggleCategory(key) {

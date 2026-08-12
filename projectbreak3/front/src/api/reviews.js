@@ -1,9 +1,9 @@
-import api from './axios';
+import api from "./axios";
 
 // El backend envuelve todo en { success, data } (ver utils/response.js -> ok())
 export const getReviews = async (productId) => {
   const response = await api.get(`/products/${productId}/reviews`);
-  return response.data.data.reviews; // antes: response.data (guardaba el envoltorio entero)
+  return response.data.data.reviews;
 };
 
 export const createReview = async (productId, { rating, comment }) => {
@@ -11,5 +11,15 @@ export const createReview = async (productId, { rating, comment }) => {
     rating,
     comment,
   });
+  return response.data.data.review;
+};
+
+export const hideReviewRequest = async (reviewId) => {
+  const response = await api.put(`/admin/reviews/${reviewId}/hide`);
+  return response.data.data.review;
+};
+
+export const unhideReviewRequest = async (reviewId) => {
+  const response = await api.put(`/admin/reviews/${reviewId}/unhide`);
   return response.data.data.review;
 };

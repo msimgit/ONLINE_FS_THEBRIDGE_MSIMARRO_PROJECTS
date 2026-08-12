@@ -106,24 +106,25 @@ function AdminProductsPage() {
           <thead>
             <tr>
               {SORTABLE_COLUMNS.map((col) => {
-                const isSortActive = sortConfig.key === col.key;
-                return (
-                  <th key={col.key}>
-                    <button
-                      type="button"
-                      className="admin-th-sort"
-                      onClick={() => handleSort(col.key)}
-                    >
-                      {col.label}
-                      {isSortActive && (
-                        <span className="admin-sort-arrow" aria-hidden="true">
-                          {sortConfig.direction === "asc" ? "▲" : "▼"}
-                        </span>
-                      )}
-                    </button>
-                  </th>
-                );
-              })}
+  const isSortActive = sortConfig.key === col.key;
+  return (
+    <th key={col.key}>
+      <button
+        type="button"
+        className="admin-th-sort"
+        onClick={() => handleSort(col.key)}
+      >
+        {col.label}
+        <span
+          className={`admin-sort-arrow ${isSortActive ? "active" : ""}`}
+          aria-hidden="true"
+        >
+          {isSortActive ? (sortConfig.direction === "asc" ? "▲" : "▼") : "↕"}
+        </span>
+      </button>
+    </th>
+  );
+})}
               <th>Visible</th>
               <th>Acciones</th>
             </tr>

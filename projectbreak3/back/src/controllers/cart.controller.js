@@ -84,3 +84,13 @@ export async function returnOrder(req, res, next) {
     next(err);
   }
 }
+
+export async function requestReturn(req, res, next) {
+  try {
+    const { items } = req.body; // [{ orderItemId, quantity, reason }]
+    const request = await cartService.requestReturn(req.params.id, items, req.user);
+    return ok(res, { request }, 201);
+  } catch (err) {
+    next(err);
+  }
+}

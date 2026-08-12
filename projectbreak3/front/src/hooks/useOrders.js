@@ -1,11 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { getOrdersRequest, returnOrderRequest } from "../api/orders";
+import { getOrdersRequest, requestReturnRequest } from "../api/orders";
 
-// Igual que useProducts/useReviews: estado local, no Redux, porque el
-// historial de pedidos solo lo necesita ProfilePage (nada global depende de él).
-// enabled: por defecto true. Se pone a false cuando no hay sesión, para no
-// disparar una petición que sabemos que va a fallar con 401 (la usa ReviewForm
-// para comprobar si el usuario compró el producto, incluso sin estar logueado).
 export const useOrders = (enabled = true) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(enabled);
@@ -28,14 +23,16 @@ export const useOrders = (enabled = true) => {
     }
   }, [enabled, fetchOrders]);
 
-  // Tras devolver, sustituimos solo ese pedido en el array local
-  // (el backend ya nos devuelve el order actualizado con status: RETURNED)
-  const returnOrder = async (orderId) => {
-    const updatedOrder = await returnOrderRequest(orderId);
+  const requestReturn = async (orderId, items) => {
+    const newRequest = await requestReturnRequest(orderId, items);
     setData((prev) =>
-      prev.map((order) => (order.id === orderId ? updatedOrder : order)),
+      prev.map((order) =>
+        order.id === orderId
+          ? { ...order, returnRequests: [...(order.returnRequests ?? []), newRequest] }
+          : order,
+      ),
     );
   };
 
-  return { data, loading, error, returnOrder };
+  return { data, loading, error, requestReturn };
 };

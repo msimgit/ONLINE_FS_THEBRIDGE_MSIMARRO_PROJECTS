@@ -10,9 +10,12 @@ async function ensureProductExists(productId) {
   }
 }
 
-export async function getReviewsByProduct(productId) {
+// $ne: true (en vez de hidden: false) para que también encaje con reviews
+// antiguas creadas antes de existir este campo, que no lo tienen guardado.
+export async function getReviewsByProduct(productId, { includeHidden = false } = {}) {
   await ensureProductExists(productId);
-  return Review.find({ productId }).sort({ createdAt: -1 });
+  const filter = includeHidden ? { productId } : { productId, hidden: { $ne: true } };
+  return Review.find(filter).sort({ createdAt: -1 });
 }
 
 export async function createReview({ productId, userId, rating, comment }) {
@@ -24,6 +27,15 @@ export async function createReview({ productId, userId, rating, comment }) {
   }
 
   return Review.create({ productId, userId, rating, comment });
+}
+
+export async function unhideReview(reviewId) {
+  const review = await Review.findById(reviewId);
+  if (!review) throw new AppError("Review no encontrada.", 404);
+
+  review.hidden = false;
+  await review.save();
+  return review;
 }
 
 export async function deleteReview(reviewId, requester) {
@@ -42,11 +54,9 @@ export async function deleteReview(reviewId, requester) {
   await review.deleteOne();
 }
 
-// Media y nº de reviews de TODOS los productos en una sola agregación
-// (usado por product.service.js al listar el catálogo: evita N+1 consultas).
-// Devuelve un Map: productId -> { avgRating, reviewCount }
 export async function getAverageRatingsByProduct() {
   const results = await Review.aggregate([
+    { $match: { hidden: { $ne: true } } },
     {
       $group: {
         _id: "$productId",
@@ -63,15 +73,58 @@ export async function getAverageRatingsByProduct() {
   return map;
 }
 
-// Media y nº de reviews de UN producto (usado en el detalle: no tiene
-// sentido traer la agregación completa de los 34 productos para mostrar uno).
 export async function getAverageRatingForProduct(productId) {
   const [result] = await Review.aggregate([
-    { $match: { productId } },
+    { $match: { productId, hidden: { $ne: true } } },
     { $group: { _id: null, avgRating: { $avg: "$rating" }, reviewCount: { $sum: 1 } } },
   ]);
 
   return result
     ? { avgRating: result.avgRating, reviewCount: result.reviewCount }
     : { avgRating: null, reviewCount: 0 };
+}
+
+// ============ ADMIN: incidencias de comentarios ============
+
+// Valoraciones < 4 estrellas, no resueltas todavía. Cruzamos con Prisma para
+// traer nombre/imagen del producto (Mongo no puede hacer join real).
+export async function getNegativeReviews() {
+  const reviews = await Review.find({
+    rating: { $lt: 4 },
+    resolved: { $ne: true },
+  }).sort({ createdAt: -1 });
+
+  if (reviews.length === 0) return [];
+
+  const productIds = [...new Set(reviews.map((r) => r.productId))];
+  const products = await prisma.product.findMany({ where: { id: { in: productIds } } });
+  const productMap = new Map(products.map((p) => [p.id, p]));
+
+  return reviews.map((r) => ({
+    id: r._id.toString(),
+    productId: r.productId,
+    userId: r.userId,
+    rating: r.rating,
+    comment: r.comment,
+    createdAt: r.createdAt,
+    product: productMap.get(r.productId) ?? null,
+  }));
+}
+
+export async function resolveReview(reviewId) {
+  const review = await Review.findById(reviewId);
+  if (!review) throw new AppError("Review no encontrada.", 404);
+
+  review.resolved = true;
+  await review.save();
+  return review;
+}
+
+export async function hideReview(reviewId) {
+  const review = await Review.findById(reviewId);
+  if (!review) throw new AppError("Review no encontrada.", 404);
+
+  review.hidden = true;
+  await review.save();
+  return review;
 }

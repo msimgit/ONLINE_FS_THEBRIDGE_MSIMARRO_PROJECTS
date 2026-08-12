@@ -6,6 +6,6 @@ import { authenticate } from "../middlewares/authenticate.js";
 const router = Router();
 
 router.get("/", authenticate, cartController.getOrders);
-router.post("/:id/return", authenticate, cartController.returnOrder);
+router.post("/:id/return", authenticate, cartController.requestReturn);
 
 export default router;

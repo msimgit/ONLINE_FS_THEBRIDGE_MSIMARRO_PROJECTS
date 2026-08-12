@@ -5,6 +5,8 @@ import AdminRoute from "../components/AdminRoute/AdminRoute";
 import AdminPage from "../pages/AdminPage/AdminPage";
 import AdminProductsPage from "../pages/AdminProductsPage/AdminProductsPage";
 import AdminProductFormPage from "../pages/AdminProductFormPage/AdminProductFormPage";
+import AdminReturnsPage from "../pages/AdminReturnsPage/AdminReturnsPage";
+import AdminReviewsPage from "../pages/AdminReviewsPage/AdminReviewsPage";
 import CartPage from "../pages/CartPage/CartPage";
 import CheckoutSuccessPage from "../pages/CheckoutSuccessPage/CheckoutSuccessPage";
 import CustomerRoute from "../components/CustomerRoute/CustomerRoute";
@@ -22,89 +24,43 @@ import WishlistPage from "../pages/WishlistPage/WishlistPage";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, // ruta padre: el marco común
+    element: <Layout />,
     children: [
+      { index: true, element: <HomePage /> },
+      { path: "products", element: <ProductsPage /> },
+      { path: "products/:id", element: <ProductDetailPage /> },
+      { path: "login", element: <LoginPage /> },
+      { path: "register", element: <RegisterPage /> },
       {
-        index: true, // hijo por defecto: se muestra en "/" exacto
-        element: <HomePage />,
-      },
-      {
-        path: "products", // → /products
-        element: <ProductsPage />,
-      },
-      {
-        path: "products/:id", // → /products/3, /products/12...
-        element: <ProductDetailPage />,
-      },
-      {
-        path: "login", // → /login form
-        element: <LoginPage />,
-      },
-      {
-        path: "register", // → /register form
-        element: <RegisterPage />,
-      },
-      {
-        // Rutas protegidas: PrivateRoute decide si renderiza el <Outlet />
-        // o redirige a /login antes de llegar a cualquiera de estos hijos.
         element: <PrivateRoute />,
         children: [
           {
-            // CustomerRoute: un ADMIN nunca llega a /cart, ni siquiera
-            // tecleando la URL directamente. Redirige a /admin.
             element: <CustomerRoute />,
-            children: [
-              {
-                path: "cart", // → /cart
-                element: <CartPage />,
-              },
-            ],
+            children: [{ path: "cart", element: <CartPage /> }],
           },
-          {
-            path: "wishlist", // → /wishlist
-            element: <WishlistPage />,
-          },
-          {
-            path: "profile", // → /profile
-            element: <ProfilePage />,
-          },
-          {
-            path: "checkout/success", // → /checkout/success
-            element: <CheckoutSuccessPage />,
-          },
+          { path: "wishlist", element: <WishlistPage /> },
+          { path: "profile", element: <ProfilePage /> },
+          { path: "checkout/success", element: <CheckoutSuccessPage /> },
         ],
       },
       {
         element: <AdminRoute />,
         children: [
           {
-            path: "admin",
-            element: <AdminPage />,
-            children: [
-              {
-                index: true,
-                element: <AdminDashboardPage />,
-              },
-              {
-                path: "products",
-                element: <AdminProductsPage />,
-              },
-              {
-                path: "products/new",
-                element: <AdminProductFormPage />,
-              },
-              {
-                path: "products/:id/edit",
-                element: <AdminProductFormPage />,
-              },
-            ],
-          },
+  path: "admin",
+  element: <AdminPage />,
+  children: [
+    { index: true, element: <AdminDashboardPage /> },
+    { path: "products", element: <AdminProductsPage /> },
+    { path: "products/new", element: <AdminProductFormPage /> },
+    { path: "products/:id/edit", element: <AdminProductFormPage /> },
+    { path: "returns", element: <AdminReturnsPage /> },
+    { path: "reviews", element: <AdminReviewsPage /> },
+  ],
+},
         ],
       },
-      {
-        path: "*", // comodín: cualquier URL no definida
-        element: <NotFoundPage />,
-      },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
 ]);

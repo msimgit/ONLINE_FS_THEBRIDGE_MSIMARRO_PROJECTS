@@ -257,23 +257,32 @@ function AdminProductFormPage() {
         </div>
 
         <div className="admin-form-row">
-          <label htmlFor="image">Imagen</label>
-          <div className="admin-image-upload">
-            {displayedImage && (
-              <img
-                src={displayedImage}
-                alt="Vista previa"
-                className="admin-image-preview"
-              />
-            )}
-            <input
-              id="image"
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-            />
-          </div>
-        </div>
+  <label htmlFor="image">Imagen</label>
+  <div className="admin-image-upload">
+    {displayedImage && (
+      <img
+        src={displayedImage}
+        alt="Vista previa"
+        className="admin-image-preview"
+      />
+    )}
+    <div className="admin-file-picker">
+      <label htmlFor="image" className="btn btn-primary admin-file-picker-btn">
+        Elegir archivo
+      </label>
+      <span className="admin-file-picker-name">
+        {imageFile?.name || "Ningún archivo seleccionado"}
+      </span>
+      <input
+        id="image"
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="admin-file-picker-input"
+      />
+    </div>
+  </div>
+</div>
 
         <div className="admin-form-row admin-form-row-checkbox">
           <label htmlFor="isActive">Visible en la web</label>

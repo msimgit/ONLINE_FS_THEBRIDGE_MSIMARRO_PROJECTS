@@ -6,15 +6,32 @@ import { useReviews } from "../../hooks/useReviews";
 import { addCartItem } from "../../store/cartSlice";
 import { fetchWishlist, toggleWishlist } from "../../store/wishlistSlice";
 import { selectIsAdmin } from "../../store/authSlice";
+import { hideReviewRequest, unhideReviewRequest } from "../../api/reviews";
 import ReviewForm from "../../components/ReviewForm/ReviewForm";
 import StarRating from "../../components/StarRating/StarRating";
 import { formatDate } from "../../utils/formatDate";
 
+function EyeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function EyeOffIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a20.4 20.4 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a20.4 20.4 0 0 1-3.22 4.53M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+      <path d="M1 1l22 22" />
+    </svg>
+  );
+}
+
 function ProductDetailPage() {
-  // useParams devuelve el id como string; el backend hace Number(id) en su capa
   const { id } = useParams();
 
-  // Dos hooks independientes: cada uno con su propio loading y error
   const { data: product, loading, error } = useProduct(id);
   const {
     data: reviews,
@@ -26,6 +43,7 @@ function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const [togglingReviewId, setTogglingReviewId] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,8 +51,6 @@ function ProductDetailPage() {
   const isAdmin = useSelector(selectIsAdmin);
   const { productIds: wishlistIds } = useSelector((state) => state.wishlist);
 
-  // Antes de los return condicionales (loading/error): las reglas de Hooks
-  // no permiten que un Hook se salte según una condición.
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(fetchWishlist());
@@ -60,9 +76,24 @@ function ProductDetailPage() {
     dispatch(toggleWishlist(product.id));
   };
 
+  const handleToggleReviewVisibility = async (review) => {
+    setTogglingReviewId(review.id);
+    try {
+      if (review.hidden) {
+        await unhideReviewRequest(review.id);
+      } else {
+        await hideReviewRequest(review.id);
+      }
+      await refetchReviews();
+    } catch (err) {
+      alert(err.response?.data?.error || "No se pudo actualizar la visibilidad.");
+    } finally {
+      setTogglingReviewId(null);
+    }
+  };
+
   if (loading) return <p className="status-message">Cargando producto...</p>;
 
-  // Un 404 del backend entra por aquí: Axios lanza error con status 4xx
   if (error) {
     return (
       <section className="product-detail">
@@ -74,7 +105,6 @@ function ProductDetailPage() {
     );
   }
 
-  // Aquí ya es seguro usar `product`: pasamos los guards de loading/error
   const isInWishlist = wishlistIds.includes(product.id);
   const isOnSale = product.salePrice != null;
 
@@ -151,8 +181,6 @@ function ProductDetailPage() {
         </div>
       </div>
 
-      {/* Reviews: el hook ya está conectado; ReviewList (paso 6) es opcional
-          por ahora según el enunciado. De momento, versión mínima: */}
       <div className="product-reviews">
         <h2>Reviews</h2>
         {reviewsLoading && <p>Cargando reviews...</p>}
@@ -161,7 +189,21 @@ function ProductDetailPage() {
         {reviews && reviews.length > 0 && (
           <div className="review-list">
             {reviews.map((review) => (
-              <div key={review.id} className="review-card">
+              <div
+                key={review.id}
+                className={`review-card${review.hidden ? " review-card-hidden" : ""}`}
+              >
+                {isAdmin && (
+                  <button
+                    className="review-visibility-toggle"
+                    onClick={() => handleToggleReviewVisibility(review)}
+                    disabled={togglingReviewId === review.id}
+                    aria-label={review.hidden ? "Mostrar review" : "Ocultar review"}
+                    title={review.hidden ? "Oculta: mostrar de nuevo" : "Ocultar review"}
+                  >
+                    {review.hidden ? <EyeOffIcon /> : <EyeIcon />}
+                  </button>
+                )}
                 <StarRating rating={review.rating} />
                 <p className="review-comment">{review.comment}</p>
                 {review.createdAt && (

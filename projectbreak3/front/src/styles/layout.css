@@ -1,0 +1,245 @@
+/* ============ LAYOUT ============ */
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.layout-content {
+  flex: 1;
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+/* ============ HEADER (barra de cristal) ============ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 5%;
+  background: rgba(17, 17, 17, 0.65);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.header-logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.header-nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.header-nav a {
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  transition: all var(--transition-smooth);
+}
+
+.header-nav a:hover {
+  color: var(--color-text);
+  background: var(--glass-bg);
+}
+
+.header-nav a.active {
+  color: var(--color-text);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.header-burger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Contenedor de login + iconos: los mantiene juntos, pegados a la derecha */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* ============ ICONOS DEL HEADER (tamaño/posición propios) ============ */
+.header-icon-button {
+  position: relative;
+  padding: 0.4rem;
+}
+
+.header-cart-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============ DRAWER (panel lateral genérico: carrito y perfil) ============ */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(400px, 100%);
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-left: 1px solid var(--glass-border);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.45);
+  animation: drawer-slide-in var(--transition-smooth);
+}
+
+@keyframes drawer-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.drawer-header h2 {
+  font-size: 1.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drawer-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.drawer-clear-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color var(--transition-smooth);
+}
+
+.drawer-clear-btn:hover {
+  color: var(--color-accent);
+}
+
+.drawer-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color var(--transition-smooth);
+}
+
+.drawer-close:hover {
+  color: var(--color-text);
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+}
+
+.drawer-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.drawer-footer .btn {
+  text-align: center;
+}
+
+/* Menú del ProfileDrawer: Perfil / Wishlist / Cerrar sesión */
+.drawer-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.drawer-menu-link {
+  padding: 1rem 1.5rem;
+  text-align: left;
+}
+
+.drawer-menu-button {
+  color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer {
+    animation: none;
+  }
+}
+
+/* ============ RESPONSIVE / MENÚ MÓVIL ============ */
+@media (max-width: 640px) {
+  .header-burger {
+    display: block;
+  }
+
+  .header-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    padding: 1rem 5%;
+    background: rgba(17, 17, 17, 0.92);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-bottom: 1px solid var(--glass-border);
+    display: none;
+  }
+
+  .header-nav.open {
+    display: flex;
+  }
+}

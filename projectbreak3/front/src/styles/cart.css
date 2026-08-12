@@ -1,0 +1,353 @@
+/* ============ CART ITEM Y SUMMARY ============ */
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem;
+  transition: all var(--transition-smooth);
+}
+
+.cart-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: calc(var(--radius-card) - 10px);
+  flex-shrink: 0;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-info h3 {
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.cart-item-info p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.cart-item-subtotal {
+  font-weight: 700;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.cart-item-remove-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+}
+
+.cart-item-remove-icon:hover {
+  color: var(--color-accent);
+  background: var(--glass-bg-hover);
+}
+
+.cart-summary {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cart-summary-total {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.cart-page {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.cart-page h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.cart-item-image-link {
+  display: block;
+  flex-shrink: 0;
+  border-radius: calc(var(--radius-card) - 10px);
+  transition: opacity var(--transition-smooth);
+}
+
+.cart-item-image-link:hover {
+  opacity: 0.85;
+}
+
+/* ============ WISHLIST ============ */
+.wishlist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wishlist-item {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem;
+  transition: all var(--transition-smooth);
+}
+
+.wishlist-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: calc(var(--radius-card) - 10px);
+  flex-shrink: 0;
+}
+
+.wishlist-item-info {
+  flex: 1;
+}
+
+.wishlist-item-info h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.3rem;
+}
+
+.wishlist-item-info p {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+/* ============ CHECKOUT SUCCESS ============ */
+.checkout-success {
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  text-align: center;
+}
+
+.receipt-order-id {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.6rem;
+}
+
+.checkout-summary-card {
+  width: 100%;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.checkout-summary-card .cart-summary {
+  justify-content: flex-end;
+  border-top: 1px dashed var(--glass-border);
+}
+
+/* ============ PERFIL Y HISTORIAL DE PEDIDOS ============ */
+.profile-page {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.profile-page h2 {
+  margin: 2rem 0 1.2rem;
+}
+
+.profile-info-card {
+  padding: 1.5rem 2rem;
+}
+
+.profile-info-card h1 {
+  margin-bottom: 0.5rem;
+}
+
+.profile-email {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.profile-member-since {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+.order-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-card {
+  padding: 1.5rem;
+}
+
+.order-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px dashed var(--glass-border);
+}
+
+.order-card-id {
+  font-weight: 700;
+}
+
+.order-card-date {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+.order-status {
+  flex-shrink: 0;
+  padding: 0.3rem 0.9rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.order-status-returned {
+  color: var(--color-accent);
+  border-color: var(--color-accent-soft);
+  background: var(--color-accent-soft);
+}
+
+/* Estados del sistema de devoluciones con aprobación */
+.order-status-pending {
+  color: #ffb86c;
+  border-color: rgba(255, 184, 108, 0.35);
+  background: rgba(255, 184, 108, 0.12);
+}
+
+.order-status-partially_returned {
+  color: #ffb86c;
+  border-color: rgba(255, 184, 108, 0.35);
+  background: rgba(255, 184, 108, 0.12);
+}
+
+.order-card .cart-item {
+  background: transparent;
+}
+
+.order-card .cart-summary {
+  border-top: 1px dashed var(--glass-border);
+}
+
+/* Formulario de devolución parcial dentro de cada cart-item de OrderCard */
+.return-item-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.return-item-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.return-item-checkbox input {
+  width: auto;
+}
+
+.return-item-note {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.return-item-note-approved {
+  color: #4ade80;
+}
+
+.return-item-note-rejected {
+  color: var(--color-accent);
+}
+
+.return-submit-group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.return-reason-select {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.return-reason-select option {
+  color: #111;
+  background: #fff;
+}
+
+/* ============ PRECIO DE OFERTA (cinta diagonal, esquina inf. derecha) ============ */
+.thumb-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.thumb-sale-stamp {
+  position: absolute;
+  bottom: 18px;
+  right: -38px;
+  width: 130px;
+  padding: 0.3rem 0;
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.product-card-price-old,
+.product-price-old,
+.admin-price-old {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  font-weight: 400;
+  font-size: 0.9em;
+}
+
+.product-card-price-sale,
+.product-price-sale,
+.admin-price-sale {
+  color: var(--color-accent);
+  font-weight: 700;
+}

@@ -197,7 +197,10 @@ export async function getOrderBySessionId(userId, sessionId) {
 export async function getOrders(userId) {
   return prisma.order.findMany({
     where: { userId },
-    include: { items: { include: { product: true } } },
+    include: {
+      items: { include: { product: true } },
+      returnRequests: { include: { items: true } },
+    },
     orderBy: { createdAt: "desc" },
   });
 }
@@ -237,5 +240,159 @@ export async function returnOrder(orderId, requester) {
       data: { status: "RETURNED" },
       include: { items: { include: { product: true } } },
     });
+  });
+}
+
+// Cantidad ya devuelta o en trámite de un OrderItem concreto (PENDING + APPROVED),
+// para no permitir devolver más unidades de las que realmente se compraron.
+async function getRequestedQuantity(tx, orderItemId) {
+  const requestItems = await tx.returnRequestItem.findMany({
+    where: {
+      orderItemId,
+      returnRequest: { status: { in: ["PENDING", "APPROVED"] } },
+    },
+  });
+  return requestItems.reduce((sum, ri) => sum + ri.quantity, 0);
+}
+
+// items = [{ orderItemId, quantity, reason }] — cada artículo puede tener su propio motivo
+export async function requestReturn(orderId, items, requester) {
+  if (!Array.isArray(items) || items.length === 0) {
+    throw new AppError("Debes indicar al menos un artículo a devolver.", 400);
+  }
+
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: { items: true },
+  });
+
+  if (!order) {
+    throw new AppError("Pedido no encontrado.", 404);
+  }
+
+  const isOwner = order.userId === requester.sub;
+  const isAdmin = requester.role === "ADMIN";
+  if (!isOwner && !isAdmin) {
+    throw new AppError("No tienes permiso para devolver este pedido.", 403);
+  }
+
+  return prisma.$transaction(async (tx) => {
+    const requestItemsData = [];
+
+    for (const { orderItemId, quantity, reason } of items) {
+      if (!quantity || quantity <= 0) {
+        throw new AppError("La cantidad a devolver debe ser mayor que 0.", 400);
+      }
+
+      const orderItem = order.items.find((oi) => oi.id === orderItemId);
+      if (!orderItem) {
+        throw new AppError(`El artículo ${orderItemId} no pertenece a este pedido.`, 404);
+      }
+
+      const alreadyRequested = await getRequestedQuantity(tx, orderItemId);
+      const available = orderItem.quantity - alreadyRequested;
+
+      if (quantity > available) {
+        throw new AppError(
+          `Solo puedes devolver ${available} unidad(es) más de "${orderItemId}".`,
+          409,
+        );
+      }
+
+      requestItemsData.push({ orderItemId, quantity, reason });
+    }
+
+    return tx.returnRequest.create({
+      data: {
+        orderId,
+        items: { create: requestItemsData },
+      },
+      include: {
+        items: { include: { orderItem: { include: { product: true } } } },
+      },
+    });
+  });
+}
+
+export async function getReturnRequests(status) {
+  return prisma.returnRequest.findMany({
+    where: status ? { status } : undefined,
+    include: {
+      order: { include: { user: { select: { email: true } } } },
+      items: { include: { orderItem: { include: { product: true } } } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+// Recalcula el estado del pedido tras aprobar una devolución: si TODAS las
+// unidades de TODOS los artículos ya están devueltas -> RETURNED;
+// si solo una parte -> PARTIALLY_RETURNED.
+async function recalculateOrderStatus(tx, orderId) {
+  const order = await tx.order.findUnique({
+    where: { id: orderId },
+    include: { items: true },
+  });
+
+  let fullyReturnedCount = 0;
+  let anyReturned = false;
+
+  for (const item of order.items) {
+    const approvedItems = await tx.returnRequestItem.findMany({
+      where: { orderItemId: item.id, returnRequest: { status: "APPROVED" } },
+    });
+    const returnedQty = approvedItems.reduce((sum, ri) => sum + ri.quantity, 0);
+
+    if (returnedQty > 0) anyReturned = true;
+    if (returnedQty >= item.quantity) fullyReturnedCount += 1;
+  }
+
+  const newStatus =
+    fullyReturnedCount === order.items.length
+      ? "RETURNED"
+      : anyReturned
+        ? "PARTIALLY_RETURNED"
+        : "COMPLETED";
+
+  await tx.order.update({ where: { id: orderId }, data: { status: newStatus } });
+}
+
+export async function approveReturnRequest(requestId) {
+  const request = await prisma.returnRequest.findUnique({
+    where: { id: requestId },
+    include: { items: { include: { orderItem: true } } },
+  });
+
+  if (!request) throw new AppError("Solicitud de devolución no encontrada.", 404);
+  if (request.status !== "PENDING") throw new AppError("Esta solicitud ya fue resuelta.", 409);
+
+  return prisma.$transaction(async (tx) => {
+    for (const reqItem of request.items) {
+      await tx.product.update({
+        where: { id: reqItem.orderItem.productId },
+        data: { stock: { increment: reqItem.quantity } },
+      });
+    }
+
+    await recalculateOrderStatus(tx, request.orderId);
+
+    return tx.returnRequest.update({
+      where: { id: requestId },
+      data: { status: "APPROVED", resolvedAt: new Date() },
+      include: { items: { include: { orderItem: { include: { product: true } } } } },
+    });
+  });
+}
+
+export async function rejectReturnRequest(requestId) {
+  const request = await prisma.returnRequest.findUnique({ where: { id: requestId } });
+
+  if (!request) throw new AppError("Solicitud de devolución no encontrada.", 404);
+  if (request.status !== "PENDING") throw new AppError("Esta solicitud ya fue resuelta.", 409);
+
+  return prisma.returnRequest.update({
+    where: { id: requestId },
+    data: { status: "REJECTED", resolvedAt: new Date() },
+    include: { items: { include: { orderItem: { include: { product: true } } } } },
   });
 }

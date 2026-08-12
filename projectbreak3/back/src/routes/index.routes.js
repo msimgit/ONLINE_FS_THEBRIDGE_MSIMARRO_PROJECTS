@@ -2,12 +2,14 @@
 // (auth: 10, productos: 8/9, reviews/wishlist: 11, carrito/pedidos: 12).
 import { Router } from "express";
 import authRoutes, { meHandler } from "./auth.routes.js";
+import cartRoutes from "./cart.routes.js";
+import checkoutRoutes from "./checkout.routes.js";
+import orderRoutes from "./order.routes.js";
 import productRoutes from "./product.routes.js";
+import returnRequestRoutes from "./returnRequest.routes.js";
+import reviewAdminRoutes from "./reviewAdmin.routes.js";
 import reviewTopLevelRoutes from "./reviewTopLevel.routes.js";
 import wishlistRoutes from "./wishlist.routes.js";
-import cartRoutes from "./cart.routes.js";
-import orderRoutes from "./order.routes.js";
-import checkoutRoutes from "./checkout.routes.js";
 
 const router = Router();
 
@@ -16,11 +18,13 @@ router.use("/auth", authRoutes);
 // El PDF de Project Break 2 pide explícitamente GET /api/me (no /api/auth/me)
 router.get("/me", ...meHandler);
 
+router.use("/admin/returns", returnRequestRoutes); // Devoluciones: aprobación/rechazo por admin
+router.use("/admin/reviews", reviewAdminRoutes);
+router.use("/cart", cartRoutes);
+router.use("/checkout", checkoutRoutes); // Stripe: crea la sesión de pago
+router.use("/orders", orderRoutes);
 router.use("/products", productRoutes); // incluye /products/:id/reviews anidado
 router.use("/reviews", reviewTopLevelRoutes); // DELETE /reviews/:reviewId
 router.use("/wishlist", wishlistRoutes);
-router.use("/cart", cartRoutes);
-router.use("/orders", orderRoutes);
-router.use("/checkout", checkoutRoutes); // Stripe: crea la sesión de pago
 
 export default router;

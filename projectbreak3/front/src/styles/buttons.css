@@ -1,0 +1,222 @@
+/* ============================================================
+   SISTEMA DE BOTONES
+   Todo botón/link de acción del sitio debería ser uno de estos
+   4 tipos. Si necesitas un botón nuevo, primero mira si encaja
+   aquí antes de escribir una clase suelta.
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: #e94560;
+  color: #fff;
+}
+.btn-secondary {
+  background: transparent;
+  color: #e94560;
+  border: 1px solid #e94560;
+}
+.btn-secondary:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+.btn-danger {
+  background: #c0392b;
+  color: #fff;
+}
+
+.btn:disabled,
+.btn.disabled,
+.header-icon-button:disabled,
+.header-icon-button.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Tipo 2: link/pill de navegación (header, sidebar admin, drawer) */
+.header-nav a.header-pill-link,
+.header-pill-link {
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all var(--transition-smooth);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-nav a.header-pill-link:hover,
+.header-nav a.header-pill-link.active,
+.header-pill-link:hover,
+.header-pill-link.active {
+  border-color: var(--color-accent);
+  background: var(--glass-bg);
+  color: var(--color-text);
+}
+
+/* Tipo 3: botón "fantasma" — texto plano, fondo solo al hover */
+.header-nav-button,
+.drawer-menu-link {
+  padding: 0.5rem 1.2rem;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  transition: all var(--transition-smooth);
+}
+
+.header-nav-button:hover,
+.drawer-menu-link:hover {
+  color: var(--color-text);
+  background: var(--glass-bg);
+}
+
+/* Tipo 4: botón icono circular (header, cantidad, cerrar overlays) */
+.header-icon-button,
+.product-detail-zoom-btn,
+.cart-item-remove-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.header-icon-button:hover,
+.header-icon-button.active,
+.product-detail-zoom-btn:hover,
+.cart-item-remove-icon:hover {
+  color: var(--color-text);
+}
+
+/* ============================================================
+   SISTEMA: INPUT PASTILLA
+   Todo campo de texto/textarea del sitio (login, búsqueda,
+   formulario admin) comparte esta base.
+   ============================================================ */
+.form-input input,
+.search-input,
+.admin-form-row input:not([type="checkbox"]),
+.admin-form-row textarea {
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--color-text);
+  font-size: 1rem;
+  outline: none;
+  transition: all var(--transition-smooth);
+}
+
+.form-input input:focus,
+.search-input:focus,
+.admin-form-row input:focus,
+.admin-form-row textarea:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 20px var(--color-accent-soft);
+}
+
+.form-input input {
+  padding: 0.6rem 1.5rem;
+  font-weight: 400;
+}
+
+.search-input {
+  width: min(500px, 100%);
+  padding: 0.85rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   SISTEMA: SELECTOR DE CANTIDAD (+ / -)
+   Base usada tal cual en ProductDetailPage. Los modificadores
+   la comprimen para caber en una fila (carrito, drawer, formulario
+   de devolución) sin duplicar la regla entera cada vez.
+   ============================================================ */
+.quantity-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.quantity-selector button {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: var(--glass-bg-hover);
+  color: var(--color-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background var(--transition-smooth);
+}
+
+.quantity-selector button:hover {
+  background: var(--color-accent);
+}
+
+.quantity-selector button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: var(--glass-bg-hover);
+}
+
+.quantity-selector span {
+  min-width: 2ch;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Modificador compacto: fila del cart-item (drawer y /cart) */
+.cart-item-quantity {
+  margin-top: 0.4rem;
+  padding: 0.2rem 0.4rem;
+  gap: 0.6rem;
+}
+
+.cart-item-quantity button {
+  width: 26px;
+  height: 26px;
+  font-size: 1rem;
+}
+
+/* Modificador compacto: mismo tamaño, usado en el formulario de
+   devolución (OrderCard) para elegir cuántas unidades devolver. */
+.return-item-quantity {
+  margin-top: 0.4rem;
+  padding: 0.2rem 0.4rem;
+  gap: 0.6rem;
+}
+
+.return-item-quantity button {
+  width: 26px;
+  height: 26px;
+  font-size: 1rem;
+}

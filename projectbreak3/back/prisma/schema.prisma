@@ -70,27 +70,56 @@ model CartItem {
 
 enum OrderStatus {
   COMPLETED
+  PARTIALLY_RETURNED
   RETURNED
 }
 
 model Order {
-  id              String      @id @default(cuid())
+  id              String          @id @default(cuid())
   userId          String
-  user            User        @relation(fields: [userId], references: [id])
+  user            User            @relation(fields: [userId], references: [id])
   total           Float
-  status          OrderStatus @default(COMPLETED)
+  status          OrderStatus     @default(COMPLETED)
   items           OrderItem[]
-  stripeSessionId String?     @unique   // NUEVO: idempotencia + lookup desde el frontend
-  createdAt       DateTime    @default(now())
+  stripeSessionId String?         @unique
+  returnRequests  ReturnRequest[]
+  createdAt       DateTime        @default(now())
 }
 
 model OrderItem {
-  id              String  @id @default(cuid())
-  orderId         String
-  order           Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId       String
-  product         Product @relation(fields: [productId], references: [id])
+  id                 String              @id @default(cuid())
+  orderId            String
+  order              Order               @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId          String
+  product            Product             @relation(fields: [productId], references: [id])
+  quantity           Int
+  priceAtPurchase    Float
+  originalPrice      Float?
+  returnRequestItems ReturnRequestItem[]
+}
+
+enum ReturnStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model ReturnRequest {
+  id         String              @id @default(cuid())
+  orderId    String
+  order      Order               @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status     ReturnStatus        @default(PENDING)
+  items      ReturnRequestItem[]
+  createdAt  DateTime            @default(now())
+  resolvedAt DateTime?
+}
+
+model ReturnRequestItem {
+  id              String        @id @default(cuid())
+  returnRequestId String
+  returnRequest   ReturnRequest @relation(fields: [returnRequestId], references: [id], onDelete: Cascade)
+  orderItemId     String
+  orderItem       OrderItem     @relation(fields: [orderItemId], references: [id])
   quantity        Int
-  priceAtPurchase Float
-  originalPrice   Float?
+  reason          String?
 }
